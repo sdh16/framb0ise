@@ -9,7 +9,7 @@ $.get("http://api.bootswatch.com/3/", function (data) {
 select.val(domoticzval.framb0ise_theme).change(); 
   select.change(function(){
     var theme = themes[$(this).val()];
-    $("link").attr("href", theme.css);
+    $("#bootswatch").attr("href", theme.css);
 	$.updateUservariable(domoticzidx.framb0ise_theme, "framb0ise_theme", 0, $(this).val());
 	}).change();
 }, "json").fail(function(){
