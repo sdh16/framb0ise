@@ -122,7 +122,7 @@
 			}
 	
 	//defaults
-	if (!domoticzval.framb0ise_theme){$.saveUservariable("framb0ise_theme", 0, 0); getDomoticzVariables()}
+	if (!domoticzval.framb0ise_theme){$.saveUservariable("framb0ise_theme", 0, 0)}
 	
 	return domoticzval;
 	return domoticzidx;
