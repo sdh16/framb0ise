@@ -16,47 +16,57 @@
     <![endif]-->
   </head>
   <body>
+ <div class="container">
 
-<nav class="navbar navbar-default" role="navigation">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">framb0ise</a>
-    </div>
+      <!-- Static navbar -->
+      <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">framb0ise</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <ul class="nav nav-pills">
+				  <li class="active"><a href="#">Home</a></li>
+				  <li><a href="#">Dashboard</a></li>
+				  <li><a href="#">Settings</a></li>
+				  <li><a href="#">Log</a></li>
+				  </ul>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><select id="themeswitcher" class="nav form-control"></select></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-right">
-          
-          <li><select class="form-control" id="themeswitcher"></li>
-          	
-		  	</ul>
-    </div>
-    
-    
-      	
-      
-            </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>Welcome to framb0ise!</h1>
+        <p>This is a work in progress ... </p>
+        <p>
+          <a class="btn btn-lg btn-primary" href="https://github.com/safi78/framb0ise" role="button">Visit the github repo &raquo;</a>
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+
 
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>	
 	<script src="js/domoticz.js"></script>
 	<script src="js/framb0ise.js"></script>
 	<script src="js/bootswatch.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-    
   </body>
 </html>
