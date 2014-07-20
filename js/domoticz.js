@@ -15,6 +15,24 @@
  
  // Functions for the API
  
+ 	// get all used devices
+ 	 $.getUseddevices = function(){
+ 	 var usedDevices = [];
+ 	 
+ 	 $.ajax({
+  			url: '/json.htm?type=devices&used=true',
+  			async: false,
+  			dataType: 'json',
+  			success: function (json) {
+	  		userVariables = json;
+	  		}
+	  	});
+	  return usedDevices;
+ 	 }
+ 	 
+ 
+
+
  	//get all uservariables return as array
 	 $.getUservariables = function() {
 		var userVariables = [];
@@ -122,13 +140,80 @@
 			}
 	
 	//defaults
+	
 	if (!domoticzval.framb0ise_theme){$.saveUservariable("framb0ise_theme", 0, 0)}
 	
 	return domoticzval;
 	return domoticzidx;
 	}
+	
+	createDomoticzDashboard = function(){
+		$("<div></div>")
+		.attr("id", "row-1")
+		.appendTo("#dashboard")
+		.addClass("row container")
+		
+		$("<div></div>")
+		.attr("id", "motionsensors")
+		.appendTo("#row-1")
+		.addClass("list-group col-md-3")
+		
+		
+		$("<a></a>").appendTo("#motionsensors")
+		.addClass("list-group-item active")
+		.text("Motion Sensors");
+		
+		$("<div></div>")
+		.attr("id", "contacts")
+		.appendTo("#row-1")
+		.addClass("list-group col-md-3")
+		
+		
+		$("<a></a>").appendTo("#contacts")
+		.addClass("list-group-item active")
+		.text("Contacts");
+		
+		$("<div></div>")
+		.attr("id", "switches")
+		.appendTo("#row-1")
+		.addClass("list-group col-md-3")
+		
+		$("<a></a>").appendTo("#switches")
+		.addClass("list-group-item active")
+		.text("Switches");
+		
+		$("<div></div>")
+		.attr("id", "security")
+		.appendTo("#row-1")
+		.addClass("list-group col-md-3")
+		
+		$("<a></a>").appendTo("#security")
+		.addClass("list-group-item active")
+		.text("Security");
+		
+		$("<a></a>").appendTo("#security")
+		.addClass("list-group-item")
+		.text("item 1");
+		$("<a></a>").appendTo("#security")
+		.addClass("list-group-item")
+		.text("item 2");
+    
+		
+	}
    
 }(jQuery, window, document));
 
 // init variables to start :)
-getDomoticzVariables();  
+getDomoticzVariables();
+createDomoticzDashboard();
+
+
+
+
+
+
+
+
+
+
+
