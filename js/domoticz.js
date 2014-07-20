@@ -29,9 +29,6 @@
 	  	});
 	  return usedDevices;
  	 }
- 	 
- 
-
 
  	//get all uservariables return as array
 	 $.getUservariables = function() {
@@ -49,7 +46,6 @@
 	return userVariables;
 	}
 
-
 	// get specified uservariable, return as array
  	$.getUservariable = function(idx) {
 		var userVariable = [];
@@ -65,15 +61,14 @@
 	  return userVariable;
 	  }
 	  
-	  // try to save a variable & return results as object
-	  /* 	0 = Integer, e.g. -1, 1, 0, 2, 10  
-	  *		1 = Float, e.g. -1.1, 1.2, 3.1
-	  *		2 = String
-	  *		3 = Date in format DD/MM/YYYY
-	  *		4 = Time in 24 hr format HH:MM
-	  */		
-	  
-	  $.saveUservariable = function(vname, vtype, vvalue){
+ 	// try to save a variable & return results as object
+	/* 	0 = Integer, e.g. -1, 1, 0, 2, 10  
+	*		1 = Float, e.g. -1.1, 1.2, 3.1
+	*		2 = String
+	*		3 = Date in format DD/MM/YYYY
+	*		4 = Time in 24 hr format HH:MM
+	*/		
+	$.saveUservariable = function(vname, vtype, vvalue){
 		  var result = [];
 		
 		$.ajax({
@@ -87,10 +82,9 @@
 
 	  return result;
 	  }
-	  
 
-	  //try to update a variable & return results as object
-	  $.updateUservariable = function(idx, vname, vtype, vvalue){
+	//try to update a variable & return results as object
+	$.updateUservariable = function(idx, vname, vtype, vvalue){
 		var result = [];
 	
 		$.ajax({
@@ -105,8 +99,7 @@
 	  return result;
 }
 
-
-//	try to delete a variable, print results to console & return results as object
+	//	try to delete a variable, print results to console & return results as object
 	$.deleteUservariable = function(idx){
 		var result = [];
 	
@@ -123,10 +116,48 @@
 	  	return result;
 }
 
-// Funtions for the webinterface	
+// Funtions for the webinterface
+
+	// fix forecastIO implementation ;)
+	function FixForecastIO(ForecastStr){
+ var a = new Date();
+ 
+ var icon ="";
+     
+     var hour = a.getHours();
+          
+	if (ForecastStr == "Rain") {
+		icon = icon+"rain";
+	}
+     
+        if (ForecastStr == "Cloudy") {
+		icon = icon+"partly-cloudy-";
+	}
+     
+        if (ForecastStr == "Partly Cloudy") {
+		icon = icon+"partly-cloudy-";
+	}
+	
+	if (ForecastStr == "Sunny") {
+		icon = icon+"clear-";
+	}
+
+     // my poor definition of 'night' :P
+	if (hour >= 0 && hour <= 6 && ForecastStr != "Rain") {
+		icon = icon +"night";
+	}
+     
+     // my poor defintion of 'day' :P
+	if (hour >= 7 && hour <= 23 && ForecastStr != "Rain") {
+		var icon = icon +"day";
+	}
+     
+     return icon;
+ }
 
 	//return all variables in an easy objects: name = array, name = idx
-	//need to have the names & the idx's arond, want to minimize the for.Eache's, so this seams easy :P
+	//need to have the names & the idx's arond, want to minimize the for.Eache's, so this seems easy :P
+	// very sucky functions, needs fixing
 	getDomoticzVariables = function(){
 		domoticzval = {};
 		domoticzidx = {};
@@ -163,102 +194,170 @@
 			.addClass("list-group col-md-"+colwidth);			
 		$("<a></a>")
 			.appendTo("#"+id)
-			.addClass("list-group-item list-item-group-heading active")
+			.addClass("list-group-item list-group-item-heading active")
 			.text(title);	
 	}
-	
 
 	// add listitem to a row, eg (idx, "motionsensors", "motion-pee", "motion-poo")
-	createDomoticzListitem = function(id, listid, item, itemtext, extraclass){			
+	createDomoticzListitem = function(idx, listid, item, itemtext, itemclass, labeltext, labelclass){			
 		$("<a></a>")
-			.attr("id", id)
+			.attr("id", idx)
 			.appendTo("#"+listid)
 			.addClass("list-group-item")
-			.addClass(extraclass);
+			.addClass(itemclass);
 		
 		$("<span></span>")
-			.appendTo("#"+id)
+			.attr("id", idx+"item")
+			.appendTo("#"+idx)
+			.addClass("spaced list-group-item-text")
 			.text(item);
+			
 
 		$("<span></span>")
+			.attr("id", idx+"value")
 			.text(itemtext)
-			.appendTo("#"+id)
+			.appendTo("#"+idx)
 			.text(itemtext)
-			.addClass("pull-right");
-    	
+			.addClass("spaced list-group-item-text");
+		
+		if (labeltext != null){
+		$("<span></span>")
+			.text(itemtext)
+			.appendTo("#"+idx+"value")
+			.text(labeltext)
+			.addClass("spaced label pull-right")
+			.addClass(labelclass);
+    	}
 	}
 	
 	updateDomoticzDashboard = function(){
+	
 	// empty existing rows (for updating)
 	setTimeout(updateDomoticzDashboard, 5000)
 	$("#dashboard-row-1").empty();
 	$("#dashboard-row-2").empty();
 	$("#switches-row-1").empty();
+	$("#temps-row-1").empty();
+	
 	//influence the rows
 	createDomoticzRow("dashboard", 1);
 	createDomoticzRow("dashboard", 2);
 	createDomoticzRow("switches", 1);
-	
+	createDomoticzRow("temps", 1);
 	var devices = $.getUseddevices()
 	devices.result.forEach(function(device,key){
-	
-	
-	// device.Type has device.Data per switchtype
-	if (device.Type != undefined && device.Data != undefined){
+
+		//detect if it's Forecast.IO :)
+		if(device.ForecastStr != undefined && device.forecast_url != undefined){
+			
+			if (! $('#forecastio').length) {
+				createDomotizListgroup("forecastio", "dashboard-row-1", 4, "Weather Forecast")
+			}
+			
+			// little hack (=
+			var icon = FixForecastIO(device.ForecastStr)
+			
+			//another little hack (=
+			$("<span></span")
+			.attr("id", "forecastioimg")
+			.appendTo("#forecastio")
+			.addClass("list-group-item text-center")
+			
+			$("<img></img")
+			.appendTo("#forecastioimg")
+			.attr("src", "img/"+icon+".png")
+			
+			switch(device.HumidityStatus) {
+
+				case "Dry":
+				var labeltext = device.HumidityStatus;
+				var labelclass = "label-warning"
+  				break;
+
+  				case "Wet":
+  				var labeltext = device.HumidityStatus;
+  				var labelclass = "label-warning"
+  				break;
+
+  				default:
+  				var labelclass = "label-success"
+  				var labeltext = "ok";
+ 				}  
+			
+			createDomoticzListitem(device.idx, "forecastio" , undefined, device.Data, itemclass, labeltext, labelclass)
+			
+			
+		}
 		
+		// Temp devices
 		if(device.Type == "Temp"){
 			
 			if (! $('#temp').length) {
-				createDomotizListgroup("temp", "dashboard-row-1", 3, "Temperature")
+				createDomotizListgroup("temp", "temps-row-1", 4, "Temperature")
 			}
 			
 			var tempValue = parseInt(device.Data)
 			
 			switch(true) {
-				case  tempValue >= 20 && tempValue <= 25:
-				var extraclass = "list-group-item-info"
+				
+				case  tempValue < 0 :
+				var labeltext = "freezing"
+				var labelclass = "label-info"
+  				break;
+  				
+				case  tempValue >= 0 && tempValue <= 16:
+				var labeltext = "cold"
+				var labelclass = "label-info"
+  				break;	
+				
+				case  tempValue >= 20 && tempValue <= 29:
+				var labeltext = "warm"
+				var labelclass = "label-warning"
   				break;			
-				case  tempValue >= 26 && tempValue <= 29:
-				var extraclass = "list-group-item-warning"
-  				break;
+				  				
   				case tempValue >= 30:
-  				var extraclass = "list-group-item-danger"
+  				var labeltext = "hot"
+  				var labelclass= "label-danger"
   				break;
+  				
   				default:
-  				var extraclass = ""
+  				var labeltext = "ok"
+  				var labelclass = "label-success"
+  			
+  			
+
  				}
-			
-		
-			
-			createDomoticzListitem(device.idx, "temp" , device.Name, device.Data, extraclass)
-		}
-		
+ 				
+ 				createDomoticzListitem(device.idx, "temp" , device.Name, device.Data, itemclass, labeltext, labelclass)
+ 			}
+
+		// Temp hum devices
 		if(device.Type == "Temp + Humidity"){
-			
 			if (! $('#temphum').length) {
-				createDomotizListgroup("temphum", "dashboard-row-1", 3, "Temperature & Humidity")
+				createDomotizListgroup("temphum", "temps-row-1", 4, "Temperature & Humidity")
 			}
 			
 			switch(device.HumidityStatus) {
+
 				case "Dry":
-				var extraclass = "list-group-item-danger"
+				var labeltext = device.HumidityStatus;
+				var labelclass = "label-warning"
   				break;
+
   				case "Wet":
-  				var extraclass = "list-group-item-warning"
+  				var labeltext = device.HumidityStatus;
+  				var labelclass = "label-warning"
   				break;
+
   				default:
-  				var extraclass = ""
+  				var labelclass = "label-success"
+  				var labeltext = "ok";
  				}       
 			
-			createDomoticzListitem(device.idx, "temphum" , device.Name, device.Data, extraclass)
+			createDomoticzListitem(device.idx, "temphum" , device.Name, device.Data, itemclass, labeltext, labelclass)
 		}
-	}
-		
 	
-	
-	// device.SwitchType has device.Status per switchtype
-	if (device.Type != undefined && device.Status != undefined){
-		
+		// On/Off devices
 		if(device.SwitchType == "On/Off"){
 			
 			if (! $('#onoff').length) {
@@ -268,49 +367,64 @@
 			createDomoticzListitem(device.idx, "onoff" , device.Name, device.Status)
 		}
 		
+		// Motion Sensors
 		if(device.SwitchType == "Motion Sensor"){
 			
 			if (! $('#motionsensors').length) {
 				createDomotizListgroup("motionsensors", "dashboard-row-1", 3, "Motion Sensors")
 			}
 			
+			
+			
 			switch(device.Status) {
+
 				case "On":
-				var extraclass = "list-group-item-danger"
+				var labeltext="motion";
+				var labelclass="label-danger";
   				break;
+
   				default:
-  				var extraclass = ""
+  				var labeltext="ok";
+  				var labelclass="label-success";
  				}
+			//explicitly undifined
+			var itemclass = undefined;
 			
-			
-			createDomoticzListitem(device.idx, "motionsensors" , device.Name, device.Status, extraclass)
+ 			
+			createDomoticzListitem(device.idx, "motionsensors" , device.Name, undefined, itemclass, labeltext, labelclass)
 		}
 		
+		// Contacts
 		if(device.SwitchType == "Contact"){
 			if (! $('#contacts').length) {
 				createDomotizListgroup("contacts", "dashboard-row-1", 3, "Contacts")
 			}
 			
+			
 			switch(device.Status) {
 				case "Open":
-				var extraclass = "list-group-item-danger"
+				var labeltext = "open";
+				var labelclass = "label-danger"
+				
   				break;
   				default:
-  				var extraclass = ""
+  				var labeltext = "closed";
+  				var labelclass= "label-success"
  				}
 			
-			createDomoticzListitem(device.idx, "contacts" , device.Name, device.Status, extraclass)
+			//explicitly undifined
+			var itemclass = undefined;
+			
+			createDomoticzListitem(device.idx, "contacts" , device.Name,  undefined, itemclass, labeltext, labelclass)
 		}
+
 		
-	}
 	})
-		
 }
    
 }(jQuery, window, document));
 
 // init variables to start :)
-getDomoticzVariables();
 updateDomoticzDashboard();
 
 

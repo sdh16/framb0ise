@@ -1,0 +1,11 @@
+.spaced { 
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+// Mixin
+.center-block() {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

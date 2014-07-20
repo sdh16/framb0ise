@@ -1,3 +1,4 @@
+getDomoticzVariables();
 $.get("http://api.bootswatch.com/3/", function (data) {
   var themes = data.themes;
   var select = $("#themeswitcher");
