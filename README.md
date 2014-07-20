@@ -1,7 +1,7 @@
 framb0ise
 =========
 
-A dashboard for your domoticz
+A dashboard for Domoticz
 
 ![alt tag](https://raw.github.com/safi78/framb0ise/master/screenshots/dashboard.png)
 
