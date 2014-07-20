@@ -1,10 +1,8 @@
 framb0ise
 =========
 
-<<<<<<< HEAD
 A dashboard for Domoticz!
 =======
->>>>>>> master
 
 ![alt tag](https://raw.github.com/safi78/framb0ise/master/screenshots/dashboard.png)
 
