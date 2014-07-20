@@ -13,6 +13,7 @@ For now it aim's to be a skin/theme for Domoticz, but I try to get it as pluggab
 Host the files in the www-root of Domoticz to get them do stuff.
 
 **Disclaimer**
+
 It probably doesn't work
 
 It's probably badly coded (help is welcome)
