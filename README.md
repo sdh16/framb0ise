@@ -12,6 +12,8 @@ For now it aim's to be a skin/theme for Domoticz, but I try to get it as pluggab
 
 Host the files in the www-root of Domoticz to get them do stuff.
 
+(https://raw.github.com/safi78/framb0ise/master/screenshots/temperature.png)
+
 **Disclaimer**
 
 It probably doesn't work
