@@ -20,11 +20,11 @@
  	 var usedDevices = [];
  	 
  	 $.ajax({
-  			url: '/json.htm?type=devices&used=true',
+  			url: '/json.htm?type=devices&used=true&order=Name',
   			async: false,
   			dataType: 'json',
   			success: function (json) {
-	  		userVariables = json;
+	  		usedDevices = json;
 	  		}
 	  	});
 	  return usedDevices;
@@ -147,65 +147,171 @@
 	return domoticzidx;
 	}
 	
-	createDomoticzDashboard = function(){
+	//create a row in a tab, eg (1, 1, "dashboard") -> produces id="dashboard-row-1"
+	createDomoticzRow = function(tab, row){
 		$("<div></div>")
-		.attr("id", "row-dashboard-1")
-		.appendTo("#dashboard")
-		.addClass("row container")
-		
+			.attr("id", tab+"-row-"+row)
+			.appendTo("#"+tab)
+			.addClass("row container")
+	}
+
+	// create a listgroup in a row, eg ("motionsensors", "dashboard-row-1", 3, "motionsensors")
+	createDomotizListgroup = function(id, rowid, colwidth, title){
 		$("<div></div>")
-		.attr("id", "motionsensors")
-		.appendTo("#row-dashboard-1")
-		.addClass("list-group col-md-3")
+			.attr("id", id)
+			.appendTo("#"+rowid)
+			.addClass("list-group col-md-"+colwidth);			
+		$("<a></a>")
+			.appendTo("#"+id)
+			.addClass("list-group-item list-item-group-heading active")
+			.text(title);	
+	}
+	
+
+	// add listitem to a row, eg (idx, "motionsensors", "motion-pee", "motion-poo")
+	createDomoticzListitem = function(id, listid, item, itemtext, extraclass){			
+		$("<a></a>")
+			.attr("id", id)
+			.appendTo("#"+listid)
+			.addClass("list-group-item")
+			.addClass(extraclass);
 		
+		$("<span></span>")
+			.appendTo("#"+id)
+			.text(item);
+
+		$("<span></span>")
+			.text(itemtext)
+			.appendTo("#"+id)
+			.text(itemtext)
+			.addClass("pull-right");
+    	
+	}
+	
+	updateDomoticzDashboard = function(){
+	// empty existing rows (for updating)
+	setTimeout(updateDomoticzDashboard, 5000)
+	$("#dashboard-row-1").empty();
+	$("#dashboard-row-2").empty();
+	$("#switches-row-1").empty();
+	//influence the rows
+	createDomoticzRow("dashboard", 1);
+	createDomoticzRow("dashboard", 2);
+	createDomoticzRow("switches", 1);
+	
+	var devices = $.getUseddevices()
+	devices.result.forEach(function(device,key){
+	
+	
+	// device.Type has device.Data per switchtype
+	if (device.Type != undefined && device.Data != undefined){
 		
-		$("<a></a>").appendTo("#motionsensors")
-		.addClass("list-group-item active")
-		.text("Motion Sensors");
+		if(device.Type == "Temp"){
+			
+			if (! $('#temp').length) {
+				createDomotizListgroup("temp", "dashboard-row-1", 3, "Temperature")
+			}
+			
+			var tempValue = parseInt(device.Data)
+			
+			switch(true) {
+				case  tempValue >= 20 && tempValue <= 25:
+				var extraclass = "list-group-item-info"
+  				break;			
+				case  tempValue >= 26 && tempValue <= 29:
+				var extraclass = "list-group-item-warning"
+  				break;
+  				case tempValue >= 30:
+  				var extraclass = "list-group-item-danger"
+  				break;
+  				default:
+  				var extraclass = ""
+ 				}
+			
 		
-		$("<div></div>")
-		.attr("id", "contacts")
-		.appendTo("#row-dashboard-1")
-		.addClass("list-group col-md-3")
+			
+			createDomoticzListitem(device.idx, "temp" , device.Name, device.Data, extraclass)
+		}
 		
+		if(device.Type == "Temp + Humidity"){
+			
+			if (! $('#temphum').length) {
+				createDomotizListgroup("temphum", "dashboard-row-1", 3, "Temperature & Humidity")
+			}
+			
+			switch(device.HumidityStatus) {
+				case "Dry":
+				var extraclass = "list-group-item-danger"
+  				break;
+  				case "Wet":
+  				var extraclass = "list-group-item-warning"
+  				break;
+  				default:
+  				var extraclass = ""
+ 				}       
+			
+			createDomoticzListitem(device.idx, "temphum" , device.Name, device.Data, extraclass)
+		}
+	}
 		
-		$("<a></a>").appendTo("#contacts")
-		.addClass("list-group-item active")
-		.text("Contacts");
+	
+	
+	// device.SwitchType has device.Status per switchtype
+	if (device.Type != undefined && device.Status != undefined){
 		
-		$("<div></div>")
-		.attr("id", "switches")
-		.appendTo("#row-dashboard-1")
-		.addClass("list-group col-md-3")
+		if(device.SwitchType == "On/Off"){
+			
+			if (! $('#onoff').length) {
+				createDomotizListgroup("onoff", "switches-row-1", 3, "On/Off")
+			}
+			
+			createDomoticzListitem(device.idx, "onoff" , device.Name, device.Status)
+		}
 		
-		$("<a></a>").appendTo("#switches")
-		.addClass("list-group-item active")
-		.text("Switches");
+		if(device.SwitchType == "Motion Sensor"){
+			
+			if (! $('#motionsensors').length) {
+				createDomotizListgroup("motionsensors", "dashboard-row-1", 3, "Motion Sensors")
+			}
+			
+			switch(device.Status) {
+				case "On":
+				var extraclass = "list-group-item-danger"
+  				break;
+  				default:
+  				var extraclass = ""
+ 				}
+			
+			
+			createDomoticzListitem(device.idx, "motionsensors" , device.Name, device.Status, extraclass)
+		}
 		
-		$("<div></div>")
-		.attr("id", "security")
-		.appendTo("#row-dashboard-1")
-		.addClass("list-group col-md-3")
-		
-		$("<a></a>").appendTo("#security")
-		.addClass("list-group-item active")
-		.text("Security");
-		
-		$("<a></a>").appendTo("#security")
-		.addClass("list-group-item")
-		.text("item 1");
-		$("<a></a>").appendTo("#security")
-		.addClass("list-group-item")
-		.text("item 2");
-    
+		if(device.SwitchType == "Contact"){
+			if (! $('#contacts').length) {
+				createDomotizListgroup("contacts", "dashboard-row-1", 3, "Contacts")
+			}
+			
+			switch(device.Status) {
+				case "Open":
+				var extraclass = "list-group-item-danger"
+  				break;
+  				default:
+  				var extraclass = ""
+ 				}
+			
+			createDomoticzListitem(device.idx, "contacts" , device.Name, device.Status, extraclass)
+		}
 		
 	}
+	})
+		
+}
    
 }(jQuery, window, document));
 
 // init variables to start :)
 getDomoticzVariables();
-createDomoticzDashboard();
+updateDomoticzDashboard();
 
 
 
