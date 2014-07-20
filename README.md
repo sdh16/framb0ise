@@ -25,4 +25,4 @@ It's probably badly coded (help is welcome)
 
 It's very Domoticz specific
 
-but it looks awesome & it works... somewhat ...
+but it looks awesome & it works... somewhat ... 'ish
