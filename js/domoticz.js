@@ -149,13 +149,13 @@
 	
 	createDomoticzDashboard = function(){
 		$("<div></div>")
-		.attr("id", "row-1")
+		.attr("id", "row-dashboard-1")
 		.appendTo("#dashboard")
 		.addClass("row container")
 		
 		$("<div></div>")
 		.attr("id", "motionsensors")
-		.appendTo("#row-1")
+		.appendTo("#row-dashboard-1")
 		.addClass("list-group col-md-3")
 		
 		
@@ -165,7 +165,7 @@
 		
 		$("<div></div>")
 		.attr("id", "contacts")
-		.appendTo("#row-1")
+		.appendTo("#row-dashboard-1")
 		.addClass("list-group col-md-3")
 		
 		
@@ -175,7 +175,7 @@
 		
 		$("<div></div>")
 		.attr("id", "switches")
-		.appendTo("#row-1")
+		.appendTo("#row-dashboard-1")
 		.addClass("list-group col-md-3")
 		
 		$("<a></a>").appendTo("#switches")
@@ -184,7 +184,7 @@
 		
 		$("<div></div>")
 		.attr("id", "security")
-		.appendTo("#row-1")
+		.appendTo("#row-dashboard-1")
 		.addClass("list-group col-md-3")
 		
 		$("<a></a>").appendTo("#security")
