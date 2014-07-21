@@ -1,7 +1,5 @@
-framb0ise
+framb0ise: A dashboard for Domoticz!
 =========
-
-A dashboard for Domoticz!
 
 Domoticz is great but the interface at the moment isn't.  
 So we started a topic to gather a team. But the animo was not as we exspected.
@@ -34,12 +32,11 @@ Screenshots
 What's needed
 
 Finalize current milestone and continue.
-Talented (web)designers to make icons, logos or elements, to make the coolest GUI ever ;-)
-Testers: to report bugs wishes and suggestions...
-Any ideas or code to make it better.... ;-)
-To resume, if you have a skill, and wish to contibute : You're Welcome ! So Please, fork this Repo, and make Pull-Requests to the Develop branch ;-)
+Talented (web)designers to make icons, logos or elements, to make the coolest GUI ever.
+Testers: to report bugs wishes and suggestions.
+Any ideas or code to make it better.
+To resume, if you have a skill, and wish to contibute : You're Welcome ! So Please, fork this Repo, and make Pull-Requests to the Develop branch.
 =======
-
 Linux (Ubuntu / Debian):
 
 Install GIT with apt-get install git-core
