@@ -287,11 +287,11 @@
 	updateDomoticzDashboard = function(){
 
 		//fix later
-		if (!$('#dasboard-row-1').length) {
+		if (!$('#dashboard-row-1').length) {
 			createDomoticzRow("dashboard", 1);
 		}
 		
-		if (!$('#dasboard-row-2').length) {
+		if (!$('#dashboard-row-2').length) {
 			createDomoticzRow("dashboard", 2);
 		}
 		
@@ -328,18 +328,15 @@
 				$("<img></img>")
 					.attr("id","fioimg")
 					.appendTo("#fioimgholder")
-					
-
-
 				}
 				
  			
- 			if(device.HumidityStatus!=$("#"+device.idx+"value").text()){
+ 			if(device.Data!=$("#"+device.idx+"value").text()){
 				var icon = FixForecastIO(device.ForecastStr)
 				$("#fioimg")
 					.hide()
 					.attr("src", "img/"+icon+".png")
-					.fadeIn("slow")
+					.fadeIn(3000)
 
 			
 				switch(device.HumidityStatus){
@@ -408,8 +405,8 @@
 
  				}
  			
- 				createDomoticzListitem(device.idx, "temp", 0, 1)
- 				updateDomoticzListitem(device.idx, device.Data, device.Name, 0, 1)
+ 				createDomoticzListitem(device.idx, "temp", 1, 1)
+ 				updateDomoticzListitem(device.idx, device.Data, device.Name, 0, 0)
  				createDomoticzLabel(device.idx)
  				updateDomoticzlabel(device.idx, labeltext, labelclass)
 
