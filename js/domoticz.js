@@ -337,6 +337,7 @@
  			if(device.HumidityStatus!=$("#"+device.idx+"value").text()){
 				var icon = FixForecastIO(device.ForecastStr)
 				$("#fioimg")
+					.hide()
 					.attr("src", "img/"+icon+".png")
 					.fadeIn("slow")
 
@@ -452,8 +453,22 @@
 				createDomotizListgroup("onoff", "switches-row-1", 3, "On/Off")
 			}
 			
-			createDomoticzListitem(device.idx, "onoff", 0)
-			updateDomoticzListitem(device.idx, device.Status, device.Name, 1)
+			switch(device.Status) {
+
+				case "On":
+				var labeltext="on";
+				var labelclass="label-danger";
+  				break;
+
+  				default:
+  				var labeltext="off";
+  				var labelclass="label-success";
+ 				}
+			
+			createDomoticzListitem(device.idx, "onoff", 0, 1)
+			updateDomoticzListitem(device.idx, device.Status, device.Name, 0, 1)
+			createDomoticzLabel(device.idx)
+			updateDomoticzlabel(device.idx, labeltext, labelclass)
 
 		
 		}
