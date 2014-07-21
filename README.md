@@ -35,7 +35,9 @@ Finalize current milestone and continue.
 Talented (web)designers to make icons, logos or elements, to make the coolest GUI ever.
 Testers: to report bugs wishes and suggestions.
 Any ideas or code to make it better.
-To resume, if you have a skill, and wish to contibute : You're Welcome ! So Please, fork this Repo, and make Pull-Requests to the Develop branch.
+To resume, if you have a skill, and wish to contibute: 
+You're Welcome,So Please, fork this Repo, and make Pull-Requests to the Develop branch.
+
 =======
 Linux (Ubuntu / Debian):
 
@@ -44,6 +46,7 @@ Install GIT with apt-get install git-core
 Run git clone https://github.com/safi78/framb0ise.git
 The open a browser and go to: http://[domoticz url or ip]:[port]/framb0ise
 
+=======
 links:
 domoticz.com/
 domoticz.com/wiki
