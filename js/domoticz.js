@@ -11,7 +11,7 @@
  *
  */
  
- ;(function ( $, window, document, undefined ) {
+ ;(function ( $, window, document, undefined ){
  
  // Functions for the API
  
@@ -197,77 +197,151 @@
 			.addClass("list-group-item list-group-item-heading active")
 			.text(title);	
 	}
-
-	// add listitem to a row, eg (idx, "motionsensors", "motion-pee", "motion-poo")
-	createDomoticzListitem = function(idx, listid, item, itemtext, itemclass, labeltext, labelclass){			
-		$("<a></a>")
-			.attr("id", idx)
-			.appendTo("#"+listid)
-			.addClass("list-group-item")
-			.addClass(itemclass);
 		
-		$("<span></span>")
-			.attr("id", idx+"item")
-			.appendTo("#"+idx)
-			.addClass("spaced list-group-item-text")
-			.text(item);
+	createDomoticzListitem = function(idx, listid, hidename, hidevalue){
+		
+		if(!$("#"+idx).length){
+		
+			$("<a></a>")
+				.attr("id", idx)
+				.appendTo("#"+listid)
+				.addClass("list-group-item")
+		
+			$("<span></span>")
+				.attr("id", idx+"name")
+				.appendTo("#"+idx)
+				.addClass("spaced list-group-item-text")
 			
-
-		$("<span></span>")
-			.attr("id", idx+"value")
-			.text(itemtext)
-			.appendTo("#"+idx)
-			.text(itemtext)
-			.addClass("spaced list-group-item-text");
+			if(hidename == 1){
+				$("#"+idx+"name").hide();
+			}	
+				
+			$("<span></span>")
+				.attr("id", idx+"value")
+				.appendTo("#"+idx)
+				.addClass("spaced list-group-item-text")
+					
+				
+			if(hidevalue == 1){
+				$("#"+idx+"value").hide();
+			}
+			
+			
 		
-		if (labeltext != null){
+		}
+	}
+	
+	updateDomoticzListitem = function(idx, newvalue, newname, hidename, hidevalue){
+		
+		if($("#"+idx+"name").text()!=newname){
+			
+			$("#"+idx+"name")
+			.fadeOut()
+			.text(newname)
+			.fadeIn();
+		}
+		
+		if(hidename == 1){
+			$("#"+idx+"name").hide();
+		}
+		
+		if($("#"+idx+"value").text()!=newvalue){
+			$("#"+idx+"value")
+			.fadeOut()
+			.text(newvalue)
+			.fadeIn();			
+		}
+		
+		if(hidevalue == 1){
+			$("#"+idx+"value").hide();
+		}
+	}
+	
+	createDomoticzLabel = function(idx){
+		
+		if(!$("#"+idx+"label").length){
+		
 		$("<span></span>")
-			.text(itemtext)
-			.appendTo("#"+idx+"value")
-			.text(labeltext)
+			.attr("id", idx+"label")
+			.appendTo("#"+idx)
 			.addClass("spaced label pull-right")
-			.addClass(labelclass);
-    	}
+			
+	}
+	}
+	
+	updateDomoticzlabel = function(idx, labeltext, labelclass){
+	
+		if($("#"+idx+"label").text()!=(labeltext)){
+			$("#"+idx+"label")
+			.hide()
+			.text(labeltext)
+			.removeClass()
+			.addClass("spaced label pull-right "+labelclass)
+			.fadeIn(1500)
+			
+		}
+	
+	
 	}
 	
 	updateDomoticzDashboard = function(){
+
+		//fix later
+		if (!$('#dasboard-row-1').length) {
+			createDomoticzRow("dashboard", 1);
+		}
+		
+		if (!$('#dasboard-row-2').length) {
+			createDomoticzRow("dashboard", 2);
+		}
+		
+		if (!$('#switches-row-1').length) {
+			createDomoticzRow("switches", 1);
+		}
+		
+		if (!$('#temps-row-1').length) {
+			createDomoticzRow("temps", 1);
+		}
+		
 	
-	// empty existing rows (for updating)
 	setTimeout(updateDomoticzDashboard, 5000)
-	$("#dashboard-row-1").empty();
-	$("#dashboard-row-2").empty();
-	$("#switches-row-1").empty();
-	$("#temps-row-1").empty();
+	
 	
 	//influence the rows
-	createDomoticzRow("dashboard", 1);
-	createDomoticzRow("dashboard", 2);
-	createDomoticzRow("switches", 1);
-	createDomoticzRow("temps", 1);
-	var devices = $.getUseddevices()
-	devices.result.forEach(function(device,key){
+		var devices = $.getUseddevices()
+		devices.result.forEach(function(device,key){
 
 		//detect if it's Forecast.IO :)
 		if(device.ForecastStr != undefined && device.forecast_url != undefined){
-			
-			if (! $('#forecastio').length) {
-				createDomotizListgroup("forecastio", "dashboard-row-1", 4, "Weather Forecast")
-			}
-			
-			// little hack (=
 			var icon = FixForecastIO(device.ForecastStr)
+			if (!$('#fio').length) {
+				createDomotizListgroup("fio", "dashboard-row-1", 4, "Weather Forecast")
+			}
+
+			if(!$("#fioimgholder").length){
 			
-			//another little hack (=
-			$("<span></span")
-			.attr("id", "forecastioimg")
-			.appendTo("#forecastio")
-			.addClass("list-group-item text-center")
+				$("<span></span")
+					.attr("id", "fioimgholder")
+					.appendTo("#fio")
+					.addClass("list-group-item text-center");
+				
+				$("<img></img>")
+					.attr("id","fioimg")
+					.appendTo("#fioimgholder")
+					
+
+
+				}
+				
+ 			
+ 			if(device.HumidityStatus!=$("#"+device.idx+"value").text()){
+				var icon = FixForecastIO(device.ForecastStr)
+				$("#fioimg")
+					.attr("src", "img/"+icon+".png")
+					.fadeIn("slow")
+
 			
-			$("<img></img")
-			.appendTo("#forecastioimg")
-			.attr("src", "img/"+icon+".png")
-			
-			switch(device.HumidityStatus) {
+				switch(device.HumidityStatus){
 
 				case "Dry":
 				var labeltext = device.HumidityStatus;
@@ -282,12 +356,17 @@
   				default:
   				var labelclass = "label-success"
   				var labeltext = "ok";
- 				}  
+ 				}
+ 				
+ 				createDomoticzListitem(device.idx, "fio", 1, 0)
+				updateDomoticzListitem(device.idx, device.Data, device.Name, 1, 0)
+				createDomoticzLabel(device.idx)
+				updateDomoticzlabel(device.idx, labeltext, labelclass)	
+			}
+			}
 			
-			createDomoticzListitem(device.idx, "forecastio" , undefined, device.Data, itemclass, labeltext, labelclass)
+ 			
 			
-			
-		}
 		
 		// Temp devices
 		if(device.Type == "Temp"){
@@ -327,12 +406,17 @@
   			
 
  				}
- 				
- 				createDomoticzListitem(device.idx, "temp" , device.Name, device.Data, itemclass, labeltext, labelclass)
+ 			
+ 				createDomoticzListitem(device.idx, "temp", 0, 1)
+ 				updateDomoticzListitem(device.idx, device.Data, device.Name, 0, 1)
+ 				createDomoticzLabel(device.idx)
+ 				updateDomoticzlabel(device.idx, labeltext, labelclass)
+
  			}
 
 		// Temp hum devices
 		if(device.Type == "Temp + Humidity"){
+			
 			if (! $('#temphum').length) {
 				createDomotizListgroup("temphum", "temps-row-1", 4, "Temperature & Humidity")
 			}
@@ -352,10 +436,14 @@
   				default:
   				var labelclass = "label-success"
   				var labeltext = "ok";
- 				}       
-			
-			createDomoticzListitem(device.idx, "temphum" , device.Name, device.Data, itemclass, labeltext, labelclass)
-		}
+ 				}    
+ 				
+ 			createDomoticzListitem(device.idx, "temphum", 0, 1)
+ 			updateDomoticzListitem(device.idx, device.Data, device.Name, 0, 1)
+			createDomoticzLabel(device.idx)
+			updateDomoticzlabel(device.idx, labeltext, labelclass)
+ 					
+			}
 	
 		// On/Off devices
 		if(device.SwitchType == "On/Off"){
@@ -364,7 +452,10 @@
 				createDomotizListgroup("onoff", "switches-row-1", 3, "On/Off")
 			}
 			
-			createDomoticzListitem(device.idx, "onoff" , device.Name, device.Status)
+			createDomoticzListitem(device.idx, "onoff", 0)
+			updateDomoticzListitem(device.idx, device.Status, device.Name, 1)
+
+		
 		}
 		
 		// Motion Sensors
@@ -388,16 +479,19 @@
   				var labelclass="label-success";
  				}
 			//explicitly undifined
-			var itemclass = undefined;
 			
- 			
-			createDomoticzListitem(device.idx, "motionsensors" , device.Name, undefined, itemclass, labeltext, labelclass)
-		}
+			createDomoticzListitem(device.idx, "motionsensors", 0, 1)
+			updateDomoticzListitem(device.idx, device.Status, device.Name, 0, 1)
+			createDomoticzLabel(device.idx)
+			updateDomoticzlabel(device.idx, labeltext, labelclass)
+
 		
+			}
+			
 		// Contacts
 		if(device.SwitchType == "Contact"){
 			if (! $('#contacts').length) {
-				createDomotizListgroup("contacts", "dashboard-row-1", 3, "Contacts")
+				createDomotizListgroup("contacts", "dashboard-row-1", 3, "Contacts", 1)
 			}
 			
 			
@@ -412,28 +506,17 @@
   				var labelclass= "label-success"
  				}
 			
-			//explicitly undifined
-			var itemclass = undefined;
 			
-			createDomoticzListitem(device.idx, "contacts" , device.Name,  undefined, itemclass, labeltext, labelclass)
+			createDomoticzListitem(device.idx, "contacts", 0, 1)
+			updateDomoticzListitem(device.idx, device.Status, device.Name, 0, 1)
+			createDomoticzLabel(device.idx)
+			updateDomoticzlabel(device.idx, labeltext, labelclass)
 		}
-
 		
 	})
-}
-   
-}(jQuery, window, document));
+	}
+
+	})(jQuery, window, document);
 
 // init variables to start :)
 updateDomoticzDashboard();
-
-
-
-
-
-
-
-
-
-
-
