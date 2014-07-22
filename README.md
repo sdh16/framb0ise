@@ -42,8 +42,11 @@ You're Welcome,So Please, fork this Repo, and make Pull-Requests to the Develop 
 Linux (Ubuntu / Debian):
 
 Install GIT with apt-get install git-core
+
 'cd' to the domoticz/www/folder of your choosing.
+
 Run git clone https://github.com/safi78/framb0ise.git
+
 The open a browser and go to: http://[domoticz url or ip]:[port]/framb0ise
 
 =======
