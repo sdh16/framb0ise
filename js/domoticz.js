@@ -184,52 +184,30 @@
 			.attr("id", tab+"-row-"+row)
 			.appendTo("#"+tab)
 			.addClass("row container")
-	}
-
-	// create a listgroup in a row, eg ("motionsensors", "dashboard-row-1", 3, "motionsensors")
-	createDomotizListgroup = function(id, rowid, colwidth, title){
-		$("<div></div>")
-			.attr("id", id)
-			.appendTo("#"+rowid)
-			.addClass("list-group col-md-"+colwidth);			
-		$("<a></a>")
-			.appendTo("#"+id)
-			.addClass("list-group-item list-group-item-heading active")
-			.text(title);	
-	}
-		
-	createDomoticzListitem = function(idx, listid, hidename, hidevalue){
-		
-		if(!$("#"+idx).length){
-		
-			$("<a></a>")
-				.attr("id", idx)
-				.appendTo("#"+listid)
-				.addClass("list-group-item")
-		
-			$("<span></span>")
-				.attr("id", idx+"name")
-				.appendTo("#"+idx)
-				.addClass("spaced list-group-item-text")
 			
-			if(hidename == 1){
-				$("#"+idx+"name").hide();
-			}	
-				
-			$("<span></span>")
-				.attr("id", idx+"value")
-				.appendTo("#"+idx)
-				.addClass("spaced list-group-item-text")
-					
-				
-			if(hidevalue == 1){
-				$("#"+idx+"value").hide();
+		$("<div></div>")
+			.attr("id", "dashboard-col-1")
+			.appendTo("#" + tab +"-row-" +row)
+			.addClass("col-md-4")
+		$("<div></div>")
+			.attr("id", "dashboard-col-2")
+			.appendTo("#" + tab +"-row-" +row)
+			.addClass("col-md-4")
+		$("<div></div>")
+			.attr("id", "dashboard-col-3")
+			.appendTo("#" + tab +"-row-" +row)
+			.addClass("col-md-4")
+	
+
+			
+		
 			}
 			
+		
 			
 		
-		}
-	}
+		
+	
 	
 	updateDomoticzListitem = function(idx, newvalue, newname, hidename, hidevalue){
 		
@@ -284,251 +262,149 @@
 	
 	}
 	
+	updateDomoticzPopover = function(device){
+		$("#"+device.idx)
+			.attr("title","LastUpdate")
+			.attr("data-content", device.LastUpdate)
+			
+			$("#"+device.idx).popover();
+		
+	};
+
+		//fix later into functions/calculations
+				
+
+				
+	
+	
+	//update dashboard (main loop)
 	updateDomoticzDashboard = function(){
 
-		//fix later
 		if (!$('#dashboard-row-1').length) {
 			createDomoticzRow("dashboard", 1);
 		}
-		
-		if (!$('#dashboard-row-2').length) {
-			createDomoticzRow("dashboard", 2);
-		}
-		
-		if (!$('#switches-row-1').length) {
-			createDomoticzRow("switches", 1);
-		}
-		
-		if (!$('#temps-row-1').length) {
-			createDomoticzRow("temps", 1);
-		}
+	
 		
 	
 	setTimeout(updateDomoticzDashboard, 5000)
 	
-	
-	//influence the rows
 		var devices = $.getUseddevices()
-		devices.result.forEach(function(device,key){
+		var col = 1;
+		var count = 0;
+		devices.result.forEach(function(value,key){
 
-		//detect if it's Forecast.IO :)
-		if(device.ForecastStr != undefined && device.forecast_url != undefined){
-			var icon = FixForecastIO(device.ForecastStr)
-			if (!$('#fio').length) {
-				createDomotizListgroup("fio", "dashboard-row-1", 4, "Weather Forecast")
-			}
-
-			if(!$("#fioimgholder").length){
+		//check if DOM elements for device.type exist
+		switch(value.SwitchType){
 			
-				$("<span></span")
-					.attr("id", "fioimgholder")
-					.appendTo("#fio")
-					.addClass("list-group-item text-center");
-				
-				$("<img></img>")
-					.attr("id","fioimg")
-					.appendTo("#fioimgholder")
-				}
-				
- 			
- 			if(device.Data!=$("#"+device.idx+"value").text()){
-				var icon = FixForecastIO(device.ForecastStr)
-				$("#fioimg")
-					.hide()
-					.attr("src", "img/"+icon+".png")
-					.fadeIn(3000)
-
+			// break up categories into Type or SwitchType
 			
-				switch(device.HumidityStatus){
-
-				case "Dry":
-				var labeltext = device.HumidityStatus;
-				var labelclass = "label-warning"
-  				break;
-
-  				case "Wet":
-  				var labeltext = device.HumidityStatus;
-  				var labelclass = "label-warning"
-  				break;
-
-  				default:
-  				var labelclass = "label-success"
-  				var labeltext = "ok";
- 				}
- 				
- 				createDomoticzListitem(device.idx, "fio", 1, 0)
-				updateDomoticzListitem(device.idx, device.Data, device.Name, 1, 0)
-				createDomoticzLabel(device.idx)
-				updateDomoticzlabel(device.idx, labeltext, labelclass)	
-			}
-			}
+			case undefined:
+			var category = value.Type.replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
+			var text = value.Data
+			break;
 			
- 			
-			
-		
-		// Temp devices
-		if(device.Type == "Temp"){
-			
-			if (! $('#temp').length) {
-				createDomotizListgroup("temp", "temps-row-1", 4, "Temperature")
-			}
-			
-			var tempValue = parseInt(device.Data)
-			
-			switch(true) {
-				
-				case  tempValue < 0 :
-				var labeltext = "freezing"
-				var labelclass = "label-info"
-  				break;
-  				
-				case  tempValue >= 0 && tempValue <= 16:
-				var labeltext = "cold"
-				var labelclass = "label-info"
-  				break;	
-				
-				case  tempValue >= 20 && tempValue <= 29:
-				var labeltext = "warm"
-				var labelclass = "label-warning"
-  				break;			
-				  				
-  				case tempValue >= 30:
-  				var labeltext = "hot"
-  				var labelclass= "label-danger"
-  				break;
-  				
-  				default:
-  				var labeltext = "ok"
-  				var labelclass = "label-success"
-  			
-  			
-
- 				}
- 			
- 				createDomoticzListitem(device.idx, "temp", 1, 1)
- 				updateDomoticzListitem(device.idx, device.Data, device.Name, 0, 0)
- 				createDomoticzLabel(device.idx)
- 				updateDomoticzlabel(device.idx, labeltext, labelclass)
-
- 			}
-
-		// Temp hum devices
-		if(device.Type == "Temp + Humidity"){
-			
-			if (! $('#temphum').length) {
-				createDomotizListgroup("temphum", "temps-row-1", 4, "Temperature & Humidity")
-			}
-			
-			switch(device.HumidityStatus) {
-
-				case "Dry":
-				var labeltext = device.HumidityStatus;
-				var labelclass = "label-warning"
-  				break;
-
-  				case "Wet":
-  				var labeltext = device.HumidityStatus;
-  				var labelclass = "label-warning"
-  				break;
-
-  				default:
-  				var labelclass = "label-success"
-  				var labeltext = "ok";
- 				}    
- 				
- 			createDomoticzListitem(device.idx, "temphum", 0, 1)
- 			updateDomoticzListitem(device.idx, device.Data, device.Name, 0, 1)
-			createDomoticzLabel(device.idx)
-			updateDomoticzlabel(device.idx, labeltext, labelclass)
- 					
-			}
-	
-		// On/Off devices
-		if(device.SwitchType == "On/Off"){
-			
-			if (! $('#onoff').length) {
-				createDomotizListgroup("onoff", "switches-row-1", 3, "On/Off")
-			}
-			
-			switch(device.Status) {
-
-				case "On":
-				var labeltext="on";
-				var labelclass="label-danger";
-  				break;
-
-  				default:
-  				var labeltext="off";
-  				var labelclass="label-success";
- 				}
-			
-			createDomoticzListitem(device.idx, "onoff", 0, 1)
-			updateDomoticzListitem(device.idx, device.Status, device.Name, 0, 1)
-			createDomoticzLabel(device.idx)
-			updateDomoticzlabel(device.idx, labeltext, labelclass)
-
-		
+			default:
+			var category = value.SwitchType.replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
+			var text = value.Status	
 		}
-		
-		// Motion Sensors
-		if(device.SwitchType == "Motion Sensor"){
-			
-			if (! $('#motionsensors').length) {
-				createDomotizListgroup("motionsensors", "dashboard-row-1", 3, "Motion Sensors")
-			}
-			
-			
-			
-			switch(device.Status) {
 
-				case "On":
-				var labeltext="motion";
-				var labelclass="label-danger";
-  				break;
-
-  				default:
-  				var labeltext="ok";
-  				var labelclass="label-success";
- 				}
-			//explicitly undifined
-			
-			createDomoticzListitem(device.idx, "motionsensors", 0, 1)
-			updateDomoticzListitem(device.idx, device.Status, device.Name, 0, 1)
-			createDomoticzLabel(device.idx)
-			updateDomoticzlabel(device.idx, labeltext, labelclass)
-
-		
-			}
-			
-		// Contacts
-		if(device.SwitchType == "Contact"){
-			if (! $('#contacts').length) {
-				createDomotizListgroup("contacts", "dashboard-row-1", 3, "Contacts", 1)
-			}
-			
-			
-			switch(device.Status) {
-				case "Open":
-				var labeltext = "open";
-				var labelclass = "label-danger"
+			// create the headings for each devicetype
+			if(!$("#" + category ).length) {
+				$("<div></div>")
+				.attr("id", category)
+				.appendTo("#dashboard-col-"+col)
+				.addClass("list-group")
 				
-  				break;
-  				default:
-  				var labeltext = "closed";
-  				var labelclass= "label-success"
- 				}
+				$("<a></a>")
+				.attr("id", category)
+				.appendTo("#" + category)
+				.addClass("list-group-item list-group-item-heading active")
+				.text(category);
 			
+			// max 5 lists on a column?
+				count = count+1;
+				if(count>4){col=col+1; count=0}
 			
-			createDomoticzListitem(device.idx, "contacts", 0, 1)
-			updateDomoticzListitem(device.idx, device.Status, device.Name, 0, 1)
-			createDomoticzLabel(device.idx)
-			updateDomoticzlabel(device.idx, labeltext, labelclass)
-		}
+				
+			}
+			
+			// create a row for each device
+			if(!$("#" + value.idx).length){
+				
+				$("<a></a>")
+					.attr("id", value.idx)
+					.appendTo("#"+category)
+					.addClass("list-group-item")
+					.text(value.Name);
+			
+			// add data or status
+				
+				$("<span></span>")
+					.attr("id", "text-" + value.idx)
+					.appendTo("#"+value.idx)
+					.addClass("list-group-item-text pull-right")
+					.text(text)
+					
+			}
 		
-	})
-	}
+			// update text if not the same
+			if ($("#text-"+value.idx).text() != text){
+				
+				$("#text-"+value.idx)
+				.hide()
+				.text(text)
+				.fadeIn(1500)
+				
+			}
+			
+			// create a popover with ?
+			if(!$("#popover-"+value.idx).length){
+			
+			$("#"+value.idx)
+					.attr("rel", "popover")
+					.attr("data-toggle", "popover")
+					.attr("data-placement", "right")
+					.attr("data-content", value.LastUpdate)
+					.attr("title","LastUpdate")
+					.addClass("popover-dismiss")			
+			}
+			
+			// update popover
+			if($("#"+value.idx).attr("data-content") != value.LastUpdate){
+			$("#"+value.idx)
+			.attr("data-content", value.LastUpdate)				
+			}
 
-	})(jQuery, window, document);
+
+
+
+			
+			
+			
+		})
+}
+
+
+// !		
+
+		
+		}(jQuery, window, document));
+
+$(document).ready(function() {
 
 // init variables to start :)
 updateDomoticzDashboard();
+// init popovers
+$("a[rel=popover]").popover();
+// dismissable popovers
+$('body').on('click', function (e) {
+    $('[data-toggle="popover"]').each(function () {
+    //the 'is' for buttons that trigger popups
+    //the 'has' for icons within a button that triggers a popup
+    if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+    $(this).popover('hide');
+    }
+    });
+});
+
+});
