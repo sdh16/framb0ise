@@ -394,7 +394,6 @@ if(e.target.hash == "#tab-Dashboard"){
 }
 
 if(e.relatedTarget.hash == "#tab-Dashboard"){
-alert("clear!")
 	  clearTimeout(dashboardTimer)
 	
 }  
