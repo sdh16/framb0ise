@@ -232,13 +232,7 @@
 		domoTabs.result.Setup = 1;
 		
 		var activeTabs = $.extend({}, myTabs, domoTabs.result) 
-		
-		console.log(activeTabs)
-		
-		//add Dashboard, Settings & Log
-		
-		
-		
+
 		$.map(activeTabs,function(value,index){
 				
 		if (value == "1"){
