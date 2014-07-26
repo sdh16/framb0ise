@@ -193,34 +193,13 @@
 	return domoticzidx;
 	}
 	
-	//create a row in a tab, eg (1, 1, "dashboard") -> produces id="dashboard-row-1"
-	createDomoticzRow = function(tab, row){
-		$("<div></div>")
-			.attr("id", tab+"-row-"+row)
-			.appendTo("#"+tab)
-			.addClass("row container")
-			
-		$("<div></div>")
-			.attr("id", "dashboard-col-1")
-			.appendTo("#" + tab +"-row-" +row)
-			.addClass("col-md-4")
-		$("<div></div>")
-			.attr("id", "dashboard-col-2")
-			.appendTo("#" + tab +"-row-" +row)
-			.addClass("col-md-4")
-		$("<div></div>")
-			.attr("id", "dashboard-col-3")
-			.appendTo("#" + tab +"-row-" +row)
-			.addClass("col-md-4")
-			}
-
-	// create some tabs
+	// create some tabs & influence order then merge them
 	createDomoticzTabs = function(){
 		
 		var myTabs = {}
-		myTabs.Dashboard = 1;
-		myTabs.Switches
-		myTabs.Scenes
+		myTabs.Dashboard = 1
+		myTabs.Switches =1
+		myTabs.Scenes = 1
 				
 		var domoTabs = $.getActiveTabs()
 		domoTabs.result.Setup = 1;
@@ -280,8 +259,8 @@
 
 	//update dashboard (main loop)
 	updateDomoticzDashboard = function(){
-	dashboardTimer = setTimeout(updateDomoticzDashboard, 5000)
-	
+		timerDashboard = setTimeout(updateDomoticzDashboard, 5000)
+
 		var devices = $.getUseddevices()
 		var col = 1;
 		var count = 0;
@@ -291,7 +270,6 @@
 		switch(value.SwitchType){
 			
 			// break up categories into Type or SwitchType
-			
 			case undefined:
 			var category = value.Type.replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
 			var text = value.Data
@@ -299,8 +277,75 @@
 			
 			default:
 			var category = value.SwitchType.replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
-			var text = value.Status	
+			var text = value.Status
 		}
+		
+			// pretty cattegory labels AFTER defining
+		switch(category){
+			
+			case "Contact":
+			var categoryLabel = "Contacts"
+			break;
+			
+			case "TempHumidity":
+			var categoryLabel = "Temperature & Humidity"
+			break;
+			
+			case "SmokeDetector":
+			var categoryLabel = "Smoke Detectors"
+			break;
+			
+			case "OnOff":
+			var categoryLabel = "Switches"
+			break;
+			
+			case "Security":
+			var categoryLabel = "Security Status"
+			break;
+			
+			case "DuskSensor":
+			var categoryLabel = "Dusk Sensors"
+			break;
+			
+			case "General":
+			var categoryLabel = "System Status"
+			break;
+			
+			case "Usage":
+			var categoryLabel = "Current Usage"
+			break;
+			
+			case "Energy":
+			var categoryLabel = "Total Usage"
+			break;
+			
+			case "YouLessMeter":
+			var categoryLabel = "Youless Sensors"
+			break;
+			
+			case "TempHumidityBaro":
+			var categoryLabel = "Temperature, Humidity & Pressure"
+			break;
+			
+			case "Temp":
+			var categoryLabel = "Temperature"
+			break;
+			
+			case "MotionSensor":
+			var categoryLabel = "Motion Sensors"
+			break;
+			
+			case "Lux":
+			var categoryLabel = "Illuminance"
+			break;
+			
+			default:
+			var categoryLabel = category
+			break;			
+			
+		}	
+			
+			
 
 			// create the headings for each devicetype
 			if(!$("#" + category ).length) {
@@ -313,7 +358,7 @@
 				.attr("id", category)
 				.appendTo("#" + category)
 				.addClass("list-group-item list-group-item-heading active")
-				.text(category);
+				.text(categoryLabel);
 			
 			// max 5 lists on a column?
 				count = count+1;
@@ -389,15 +434,20 @@ createDomoticzTabs()
 // stop refreshing tabs when not in focus! 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
-if(e.target.hash == "#tab-Dashboard"){
-	  updateDomoticzDashboard()
-}
+	// set and clear timers
 
-if(e.relatedTarget.hash == "#tab-Dashboard"){
-	  clearTimeout(dashboardTimer)
-	
-}  
-  
+	switch(e.target.hash){
+		case "#tab-Dashboard":
+		updateDomoticzDashboard()
+		break;
+	}
+
+	switch(e.relatedTarget.hash){
+		case "#tab-Dashboard":
+		clearTimeout(timerDashboard)
+		break;
+	}
+
 })
 
 // init popovers
