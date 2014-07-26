@@ -37,13 +37,9 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <ul class="nav nav-pills">
+              <ul class="nav nav-pills" id="tabs">
 				  <li class="active"><a href="#home" data-toggle="tab"><span class="glyphicon glyphicon-home"></span>&nbsp;Home</a></li>
-				  <li><a href="#dashboard" data-toggle="tab"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Dashboard</a></li>
-				  <li><a href="#temps" data-toggle="tab"><span class="glyphicon glyphicon-tasks"></span>&nbsp;Temperature</a></li>
-				  <li><a href="#switches" data-toggle="tab"><span class="glyphicon glyphicon-off"></span>&nbsp;Switches</a></li>
 				  <li><a href="#settings" data-toggle="tab"><span class="fa fa-gears"></span>&nbsp;Settings</a></li>
-				  <li><a href="#log" data-toggle="tab" class="nav-text"><span class="fa fa-file-text-o"></span>&nbsp;Log</a></li>
 				 
 				  </ul>
             </ul>
@@ -57,7 +53,7 @@
 
     </div> <!-- /container -->
 
-<div class="tab-content">    
+<div class="tab-content" id="tab-content"">    
 	<div id="home" class="container tab-pane active">
       <div class="jumbotron">
         <h1>Welcome to framb0ise!</h1>
@@ -66,9 +62,6 @@
         <p><a class="btn btn-lg btn-primary" href="http://www.domoticz.com/" role="button">Visit Domoticz &raquo;</a></p>
       </div>
       </div>   
-    <div id="dashboard" class="container tab-pane"></div>
-    <div id="switches" class="container tab-pane"></div>
-    <div id="temps" class="container tab-pane"></div>
 	<div id="settings" class="container tab-pane">
 		<div id="row-settings-1" class="row container">
 		<div class="list-group col-md-3">
@@ -76,7 +69,6 @@
 			<a class="list-group-item"><select id="themeswitcher" class="nav form-control"></select></a>
 		</div>
 	</div>
-	<div id="log" class="container tab-pane"></div>
 </div> <!-- /tabcontent -->
 
 

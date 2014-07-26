@@ -15,6 +15,23 @@
  
  // Functions for the API
  
+ 	// get active tabs
+ 	$.getActiveTabs = function() {
+ 	 var activeTabs = [];
+ 	 
+ 	 $.ajax({
+  			url: '/json.htm?type=command&param=getactivetabs',
+  			async: false,
+  			dataType: 'json',
+  			success: function (json) {
+	  		activeTabs = json;
+	  		}
+	  	});
+	  return activeTabs;
+ 	 }
+  
+  
+ 
  	// get all used devices
  	 $.getUseddevices = function(){
  	 var usedDevices = [];
@@ -202,83 +219,93 @@
 			
 		
 			}
-			
-		
-			
-		
-		
-	
-	
-	updateDomoticzListitem = function(idx, newvalue, newname, hidename, hidevalue){
-		
-		if($("#"+idx+"name").text()!=newname){
-			
-			$("#"+idx+"name")
-			.fadeOut()
-			.text(newname)
-			.fadeIn();
-		}
-		
-		if(hidename == 1){
-			$("#"+idx+"name").hide();
-		}
-		
-		if($("#"+idx+"value").text()!=newvalue){
-			$("#"+idx+"value")
-			.fadeOut()
-			.text(newvalue)
-			.fadeIn();			
-		}
-		
-		if(hidevalue == 1){
-			$("#"+idx+"value").hide();
-		}
-	}
-	
-	createDomoticzLabel = function(idx){
-		
-		if(!$("#"+idx+"label").length){
-		
-		$("<span></span>")
-			.attr("id", idx+"label")
-			.appendTo("#"+idx)
-			.addClass("spaced label pull-right")
-			
-	}
-	}
-	
-	updateDomoticzlabel = function(idx, labeltext, labelclass){
-	
-		if($("#"+idx+"label").text()!=(labeltext)){
-			$("#"+idx+"label")
-			.hide()
-			.text(labeltext)
-			.removeClass()
-			.addClass("spaced label pull-right "+labelclass)
-			.fadeIn(1500)
-			
-		}
-	
-	
-	}
-	
-	updateDomoticzPopover = function(device){
-		$("#"+device.idx)
-			.attr("title","LastUpdate")
-			.attr("data-content", device.LastUpdate)
-			
-			$("#"+device.idx).popover();
-		
-	};
 
-		//fix later into functions/calculations
+	// create some tabs
+	createDomoticzTabs = function(){
+		
+		var myTabs = {}
+		myTabs.Dashboard = 1;
+		myTabs.Settings = 1;
+		myTabs.Log = 1;
+		
+		var domoTabs = $.getActiveTabs()
+		
+		var activeTabs = $.extend({}, myTabs, domoTabs.result) 
+		
+		console.log(activeTabs)
+		
+		//add Dashboard, Settings & Log
+		
+		
+		
+		$.map(activeTabs,function(value,index){
 				
+		if (value == "1"){
+			var tabid = index.replace("Enable", "")
+			var tabtext = index.replace("EnableTab", "")
+			if(!$("#"+tabid).length){
+				tabid = index.replace("Enable", "")
+				tabtext = index.replace("EnableTab", "")
+			
+			
+				$("<li></li>")
+					.attr("id",tabid)
+					.appendTo("#tabs")
+					
+				$("<a></a>")
+					.appendTo("#"+tabid)
+					.attr("href", "#tab-"+tabtext)
+					.attr("data-toggle", "tab")
+					.text(tabtext)
+					
+				$("<div></div>")
+					.attr("id", "tab-"+tabtext)
+					.appendTo("#tab-content")
+					.addClass("container tab-pane")
+							
+				$("<div></div>")
+					.attr("id", tabtext+"-row")
+					.appendTo("#tab-"+tabtext)
+					.addClass("row container")
+			
+				$("<div></div>")
+					.attr("id", tabtext + "-col-1")
+					.appendTo("#"+tabtext +"-row")
+					.addClass("col-md-4")
+		
+				$("<div></div>")
+					.attr("id", tabtext + "-col-2")
+					.appendTo("#"+ tabtext + "-row")
+					.addClass("col-md-4")
+		
+				$("<div></div>")
+					.attr("id", tabtext + "-col-3")
+					.appendTo("#" +tabtext +"-row")
+					.addClass("col-md-4")
 
-				
-	
-	
+			
+			
+			
+			
+			}
+			
+// <div id="dashboard" class="container tab-pane"></div>
+
+// <ul class="nav nav-pills" id="tabs">
+// <li class="active"><a href="#home" data-toggle="tab"><span class="glyphicon glyphicon-home"></span>&nbsp;Home</a></li>
+
+			
+			
+		}
+			
+		})
+		
+	}	
+
 	//update dashboard (main loop)
 	updateDomoticzDashboard = function(){
+
+		createDomoticzTabs()
 
 		if (!$('#dashboard-row-1').length) {
 			createDomoticzRow("dashboard", 1);
@@ -312,7 +339,7 @@
 			if(!$("#" + category ).length) {
 				$("<div></div>")
 				.attr("id", category)
-				.appendTo("#dashboard-col-"+col)
+				.appendTo("#Dashboard-col-"+col)
 				.addClass("list-group")
 				
 				$("<a></a>")
@@ -323,7 +350,7 @@
 			
 			// max 5 lists on a column?
 				count = count+1;
-				if(count>4){col=col+1; count=0}
+				if(count>5){col=col+1; count=0}
 			
 				
 			}
@@ -366,7 +393,7 @@
 					.attr("data-placement", "right")
 					.attr("data-content", value.LastUpdate)
 					.attr("title","LastUpdate")
-					.addClass("popover-dismiss")			
+					.attr("data-container", "body")			
 			}
 			
 			// update popover
@@ -383,10 +410,7 @@
 			
 		})
 }
-
-
 // !		
-
 		
 		}(jQuery, window, document));
 
