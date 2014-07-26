@@ -372,9 +372,21 @@
 				
 				$("<a></a>")
 					.attr("id", value.idx)
-					.appendTo("#"+category)
 					.addClass("list-group-item")
-					.text(value.Name);
+					.appendTo("#"+category)
+			
+			$("<button></button>")
+					.attr("id", "button-"+value.idx)
+					.attr("data-toggle", "collapse")
+					.attr("data-target", "#popout-"+value.idx)
+					.appendTo("#"+value.idx)
+					.addClass("glyphicon glyphicon-chevron-right spaced btn btn-default btn-xs")
+			
+				$("<span></span>")
+					.attr("id", "name-"+value.idx)
+					.appendTo("#"+value.idx)
+					.addClass("list-group-item-text")
+					.text(value.Name)
 			
 			// add data or status
 				
@@ -384,7 +396,9 @@
 					.addClass("list-group-item-text pull-right")
 					.text(text)
 					
+			
 			}
+				
 		
 			// update text if not the same
 			if ($("#text-"+value.idx).text() != text){
@@ -396,23 +410,34 @@
 				
 			}
 			
-			// create a popover with ?
-			if(!$("#popover-"+value.idx).length){
+			// create more info stuff ?
+			if(!$("#popout-"+value.idx).length){
 			
-			$("#"+value.idx)
-					.attr("rel", "popover")
-					.attr("data-toggle", "popover")
-					.attr("data-placement", "right")
-					.attr("data-content", value.LastUpdate)
-					.attr("title","LastUpdate")
-					.attr("data-container", "body")			
+			$("<div></div>")
+				.attr("id", "popout-"+value.idx)
+				.appendTo("#"+value.idx)
+				.attr("data-parent", "#"+value.idx)
+				.addClass("collapse spaced")
+			
+			$("<p></p>")
+				.appendTo("#popout-"+value.idx)
+				.addClass("label label-success spaced")
+				.text(value.LastUpdate)
+
+			if(value.BatteryLevel <= 100){
+
+			$("<p></p>")
+				.appendTo("#popout-"+value.idx)
+				.addClass("label label-success spaced")
+				.text("Battery: "+value.BatteryLevel)
+				
+				}
+					
+					
+													
 			}
 			
-			// update popover
-			if($("#"+value.idx).attr("data-content") != value.LastUpdate){
-			$("#"+value.idx)
-			.attr("data-content", value.LastUpdate)				
-			}
+			
 
 
 
@@ -450,18 +475,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
 })
 
-// init popovers
-$("a[rel=popover]").popover();
+$('.collapse').collapse()
 
-// dismissable popovers
-$('body').on('click', function (e) {
-    $('[data-toggle="popover"]').each(function () {
-    //the 'is' for buttons that trigger popups
-    //the 'has' for icons within a button that triggers a popup
-    if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-    $(this).popover('hide');
-    }
-    });
-});
 
 });
