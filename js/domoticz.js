@@ -225,10 +225,11 @@
 		
 		var myTabs = {}
 		myTabs.Dashboard = 1;
-		myTabs.Settings = 1;
-		myTabs.Log = 1;
-		
+		myTabs.Switches
+		myTabs.Scenes
+				
 		var domoTabs = $.getActiveTabs()
+		domoTabs.result.Setup = 1;
 		
 		var activeTabs = $.extend({}, myTabs, domoTabs.result) 
 		
