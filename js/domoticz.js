@@ -30,8 +30,6 @@
 	  return activeTabs;
  	 }
   
-  
- 
  	// get all used devices
  	 $.getUseddevices = function(){
  	 var usedDevices = [];
@@ -214,10 +212,6 @@
 			.attr("id", "dashboard-col-3")
 			.appendTo("#" + tab +"-row-" +row)
 			.addClass("col-md-4")
-	
-
-			
-		
 			}
 
 	// create some tabs
@@ -241,8 +235,7 @@
 			if(!$("#"+tabid).length){
 				tabid = index.replace("Enable", "")
 				tabtext = index.replace("EnableTab", "")
-			
-			
+						
 				$("<li></li>")
 					.attr("id",tabid)
 					.appendTo("#tabs")
@@ -277,19 +270,7 @@
 					.attr("id", tabtext + "-col-3")
 					.appendTo("#" +tabtext +"-row")
 					.addClass("col-md-4")
-
-			
-			
-			
-			
 			}
-			
-// <div id="dashboard" class="container tab-pane"></div>
-
-// <ul class="nav nav-pills" id="tabs">
-// <li class="active"><a href="#home" data-toggle="tab"><span class="glyphicon glyphicon-home"></span>&nbsp;Home</a></li>
-
-			
 			
 		}
 			
@@ -299,16 +280,7 @@
 
 	//update dashboard (main loop)
 	updateDomoticzDashboard = function(){
-
-		createDomoticzTabs()
-
-		if (!$('#dashboard-row-1').length) {
-			createDomoticzRow("dashboard", 1);
-		}
-	
-		
-	
-	setTimeout(updateDomoticzDashboard, 5000)
+	dashboardTimer = setTimeout(updateDomoticzDashboard, 5000)
 	
 		var devices = $.getUseddevices()
 		var col = 1;
@@ -411,10 +383,27 @@
 
 $(document).ready(function() {
 
-// init variables to start :)
-updateDomoticzDashboard();
+// create the tabs, row and colums
+createDomoticzTabs()
+
+// stop refreshing tabs when not in focus! 
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+if(e.target.hash == "#tab-Dashboard"){
+	  updateDomoticzDashboard()
+}
+
+if(e.relatedTarget.hash == "#tab-Dashboard"){
+alert("clear!")
+	  clearTimeout(dashboardTimer)
+	
+}  
+  
+})
+
 // init popovers
 $("a[rel=popover]").popover();
+
 // dismissable popovers
 $('body').on('click', function (e) {
     $('[data-toggle="popover"]').each(function () {
