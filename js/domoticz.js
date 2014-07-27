@@ -23,7 +23,7 @@
   			url: '/json.htm?type=command&param=getactivetabs',
   			async: false,
   			dataType: 'json',
-  			success: function (json) {
+  			success: function (json) {		
 	  		activeTabs = json;
 	  		}
 	  	});
@@ -127,7 +127,6 @@
 	  		}
 	  	});
 
-	  	console.log(result.title, idx, result.status);
 	  	return result;
 }
 
@@ -198,15 +197,19 @@
 	createDomoticzTabs = function(){
 		
 		var myTabs = {}
+		var domoTabs = $.getActiveTabs()
+
+		// second call, buggy json :(
+		domoTabs = $.getActiveTabs()	
 		
+		myTabs.Setup = 1
 		myTabs.Dashboard = 1
 		myTabs.Rooms = 1
-				
-		var domoTabs = $.getActiveTabs()
-		domoTabs.result.Setup = 1;
 		
-		var activeTabs = $.extend({}, myTabs, domoTabs.result) 
+				
 
+		var activeTabs = $.extend({}, myTabs, domoTabs.result) 
+		
 		$.map(activeTabs,function(value,index){
 				
 		if (value == "1"){
@@ -253,7 +256,8 @@
 					
 			
 			}
-			
+	
+	
 		}
 			
 		})
@@ -485,13 +489,14 @@ getDomoticzVariables();
 			
 		})
 }
+
+
 // !		
 		
 		}(jQuery, window, document));
 
-$(document).ready(function() {
 
-// create the tabs, row and colums
+$(document).ready(function() {
 createDomoticzTabs()
 updateDomoticzSetup()
 
@@ -505,8 +510,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		updateDomoticzDashboard()
 		break;
 		
-		case "#tab-Setup":
-		break;
+		
 
 	}
 
@@ -516,16 +520,13 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		clearTimeout(timerDashboard)
 		break;
 		
-		default:
-		break;
+		
 	}
 
 
 })
 
 $('.collapse').collapse()
-
-$('#Dashboard a[href="#tab-Dashboard"]').tab('show')
 
 $("#themes").change(function(){
 	
@@ -534,10 +535,7 @@ $("#themes").change(function(){
 		var theme = themes[$("#themes").val()];
 		$("#bootswatch").attr("href", theme.css);
 		$.updateUservariable(domoticzidx.framb0ise_theme, "framb0ise_theme", 0, $("#themes").val());
-   
-    })
-   
-	
-});	
-
+    })	
+})	
+$('#Dashboard a[href="#tab-Dashboard"]').tab('show')
 });
