@@ -132,6 +132,7 @@
 }
 
 // Funtions for the webinterface
+	
 
 	// fix forecastIO implementation ;)
 	function FixForecastIO(ForecastStr){
@@ -197,9 +198,9 @@
 	createDomoticzTabs = function(){
 		
 		var myTabs = {}
+		
 		myTabs.Dashboard = 1
-		myTabs.Switches =1
-		myTabs.Scenes = 1
+		myTabs.Rooms = 1
 				
 		var domoTabs = $.getActiveTabs()
 		domoTabs.result.Setup = 1;
@@ -249,6 +250,8 @@
 					.attr("id", tabtext + "-col-3")
 					.appendTo("#" +tabtext +"-row")
 					.addClass("col-md-4")
+					
+			
 			}
 			
 		}
@@ -256,14 +259,50 @@
 		})
 		
 	}	
+	
+	//update switches
+	updateDomoiczSwitches = function(){
+		timerSwitches = setTimeout(updateDomoiczSwitches, 5000)
+	}
+	
+	// update Setup
+	updateDomoticzSetup = function(){
 
-	//update dashboard (main loop)
+// themewatch
+getDomoticzVariables();
+	
+	$("<select/>")
+			.attr("id", "themes")
+			.addClass("form-control")
+			.appendTo("#Setup-col-1")
+			
+	// get & fill the select
+	$.get("http://api.bootswatch.com/3/", function (data) {
+		var themes = data.themes
+		
+		themes.forEach(function(value, index){
+			
+			$('#themes').append($("<option/>", {
+				value: index,
+				text: value.name
+			}));
+		})
+	})
+
+$("themes").val(domoticzval.framb0ise_theme).change();		
+
+
+
+}
+		
+	
+
+	//update dashboard
 	updateDomoticzDashboard = function(){
 		timerDashboard = setTimeout(updateDomoticzDashboard, 5000)
 
 		var devices = $.getUseddevices()
 		var col = 1;
-		var count = 0;
 		devices.result.forEach(function(value,key){
 
 		//check if DOM elements for device.type exist
@@ -360,9 +399,9 @@
 				.addClass("list-group-item list-group-item-heading active")
 				.text(categoryLabel);
 			
-			// max 5 lists on a column?
-				count = count+1;
-				if(count>5){col=col+1; count=0}
+			// switch col
+				col = col+1;
+				if(col==4){col=1}
 			
 				
 			}
@@ -393,7 +432,7 @@
 				$("<span></span>")
 					.attr("id", "text-" + value.idx)
 					.appendTo("#"+value.idx)
-					.addClass("list-group-item-text pull-right")
+					.addClass("label label-info pull-right")
 					.text(text)
 					
 			
@@ -417,19 +456,19 @@
 				.attr("id", "popout-"+value.idx)
 				.appendTo("#"+value.idx)
 				.attr("data-parent", "#"+value.idx)
-				.addClass("collapse spaced")
+				.addClass("collapse well")
 			
-			$("<p></p>")
+			$("<span></span>")
 				.appendTo("#popout-"+value.idx)
-				.addClass("label label-success spaced")
+				.addClass("label label-info spaced")
 				.text(value.LastUpdate)
 
 			if(value.BatteryLevel <= 100){
 
 			$("<p></p>")
 				.appendTo("#popout-"+value.idx)
-				.addClass("label label-success spaced")
-				.text("Battery: "+value.BatteryLevel)
+				.addClass("label label-success spaced ion-battery-empty")
+				.text(value.BatteryLevel+"%")
 				
 				}
 					
@@ -455,6 +494,7 @@ $(document).ready(function() {
 
 // create the tabs, row and colums
 createDomoticzTabs()
+updateDomoticzSetup()
 
 // stop refreshing tabs when not in focus! 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -465,17 +505,40 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		case "#tab-Dashboard":
 		updateDomoticzDashboard()
 		break;
+		
+		case "#tab-Setup":
+		break;
+
 	}
 
 	switch(e.relatedTarget.hash){
+		
 		case "#tab-Dashboard":
 		clearTimeout(timerDashboard)
 		break;
+		
+		default:
+		break;
 	}
+
 
 })
 
 $('.collapse').collapse()
 
+$('#Dashboard a[href="#tab-Dashboard"]').tab('show')
+
+$("#themes").change(function(){
+	
+	$.get("http://api.bootswatch.com/3/", function (data){
+		var themes = data.themes
+		var theme = themes[$("#themes").val()];
+		$("#bootswatch").attr("href", theme.css);
+		$.updateUservariable(domoticzidx.framb0ise_theme, "framb0ise_theme", 0, $("#themes").val());
+   
+    })
+   
+	
+});	
 
 });
