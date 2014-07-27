@@ -10,13 +10,10 @@
     <!-- Bootstrap -->
 	<link id="bootswatch" rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/framb0ise.css">
-	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
+	<link href="http:///maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css" rel="stylesheet">
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
   <body>
  <div class="container">
@@ -31,17 +28,12 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">framb0ise</a>
-          </div>
+                      </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <ul class="nav nav-pills">
-				  <li class="active"><a href="#home" data-toggle="tab"><span class="glyphicon glyphicon-home"></span>&nbsp;Home</a></li>
-				  <li><a href="#dashboard" data-toggle="tab"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;Dashboard</a></li>
-				  <li><a href="#temps" data-toggle="tab"><span class="glyphicon glyphicon-tasks"></span>&nbsp;Temperature</a></li>
-				  <li><a href="#switches" data-toggle="tab"><span class="glyphicon glyphicon-off"></span>&nbsp;Switches</a></li>
-				  <li><a href="#settings" data-toggle="tab"><span class="fa fa-gears"></span>&nbsp;Settings</a></li>
-				  <li><a href="#log" data-toggle="tab" class="nav-text"><span class="fa fa-file-text-o"></span>&nbsp;Log</a></li>
+              <ul class="nav nav-pills" id="tabs">
+			<li id="framb0ise" class="active"><a href="#tab-Home" data-toggle="tab"><img style="max-width:100px; margin-top: -7px;" src="img/framboise (2).png">&nbsp;framboise</a></li>
+	  
 				 
 				  </ul>
             </ul>
@@ -55,8 +47,8 @@
 
     </div> <!-- /container -->
 
-<div class="tab-content">    
-	<div id="home" class="container tab-pane active">
+<div class="tab-content" id="tab-content">    
+	<div id="tab-Home" class="container tab-pane active">
       <div class="jumbotron">
         <h1>Welcome to framb0ise!</h1>
         <p>This is a work in progress ... </p>
@@ -64,27 +56,11 @@
         <p><a class="btn btn-lg btn-primary" href="http://www.domoticz.com/" role="button">Visit Domoticz &raquo;</a></p>
       </div>
       </div>   
-    <div id="dashboard" class="container tab-pane"></div>
-    <div id="switches" class="container tab-pane"></div>
-    <div id="temps" class="container tab-pane"></div>
-	<div id="settings" class="container tab-pane">
-		<div id="row-settings-1" class="row container">
-		<div class="list-group col-md-3">
-			<a class="list-group-item active">Theme</a>
-			<a class="list-group-item"><select id="themeswitcher" class="nav form-control"></select></a>
-		</div>
-	</div>
-	<div id="log" class="container tab-pane"></div>
 </div> <!-- /tabcontent -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>	
+<script src="js/framb0ise.js"></script>
+<script src="js/bootstrap.min.js"></script>	
+<script src="js/domoticz.js"></script>
 
-
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>	
-	<script src="js/domoticz.js"></script>
-	<script src="js/framb0ise.js"></script>
-	<script src="js/bootswatch.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
   </body>
 </html>
