@@ -287,11 +287,10 @@ getDomoticzVariables();
 				text: value.name
 			}));
 		})
+
+		$("#themes").val(domoticzval.framb0ise_theme).change();	
+
 	})
-
-$("themes").val(domoticzval.framb0ise_theme).change();		
-
-
 
 }
 		
