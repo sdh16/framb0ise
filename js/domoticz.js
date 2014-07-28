@@ -196,13 +196,17 @@
 	// create some tabs & influence order then merge them
 	createDomoticzTabs = function(){
 		
-		var myTabs = {}
+		
+		var myTabs ={}
 		var domoTabs = $.getActiveTabs()
 
 		// second call, buggy json :(
-		domoTabs = $.getActiveTabs()	
+		domoTabs = $.getActiveTabs()
+		domoTabs.Setup =1
+		domoTabs.Links = 1
 		
 		myTabs.Setup = 1
+		myTabs.Links = 1
 		myTabs.Dashboard = 1
 		myTabs.Rooms = 1
 		
@@ -306,7 +310,7 @@ getDomoticzVariables();
 
 	//update dashboard
 	updateDomoticzDashboard = function(){
-		timerDashboard = setTimeout(updateDomoticzDashboard, 5000)
+		
 
 		var devices = $.getUseddevices()
 		var col = 1;
@@ -434,7 +438,8 @@ getDomoticzVariables();
 					.attr("data-toggle", "collapse")
 					.attr("data-target", "#popout-"+value.idx)
 					.appendTo("#line-"+value.idx)
-					.addClass("spaced pull-left glyphicon glyphicon-chevron-right btn btn-default btn-xs")
+					.addClass("spaced pull-left btn btn-primary btn-plus btn-xs")
+					.text("+")
 			
 				$("<span></span>")
 					.attr("id", "name-"+value.idx)
@@ -510,8 +515,10 @@ getDomoticzVariables();
 
 
 $(document).ready(function() {
+$('.collapse').collapse()
 createDomoticzTabs()
 updateDomoticzSetup()
+updateDomoticzDashboard()
 
 // stop refreshing tabs when not in focus! 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -520,11 +527,8 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
 	switch(e.target.hash){
 		case "#tab-Dashboard":
-		updateDomoticzDashboard()
+		timerDashboard = setTimeout(updateDomoticzDashboard, 5000)
 		break;
-		
-		
-
 	}
 
 	switch(e.relatedTarget.hash){
@@ -532,14 +536,10 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		case "#tab-Dashboard":
 		clearTimeout(timerDashboard)
 		break;
-		
-		
 	}
-
-
 })
 
-$('.collapse').collapse()
+
 
 $("#themes").change(function(){
 	
@@ -551,4 +551,11 @@ $("#themes").change(function(){
     })	
 })	
 $('#Dashboard a[href="#tab-Dashboard"]').tab('show')
+
+$('button').click(function(){ //you can give id or class name here for $('button')
+    $(this).text(function(i,old){
+        return old=='+' ?  '-' : '+';
+    });
+});
+
 });
