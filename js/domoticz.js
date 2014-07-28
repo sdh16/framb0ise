@@ -242,18 +242,22 @@
 				$("<div></div>")
 					.attr("id", tabtext + "-col-1")
 					.appendTo("#"+tabtext +"-row")
-					.addClass("col-md-4")
+					.addClass("col-md-3")
 		
 				$("<div></div>")
 					.attr("id", tabtext + "-col-2")
 					.appendTo("#"+ tabtext + "-row")
-					.addClass("col-md-4")
+					.addClass("col-md-3")
 		
 				$("<div></div>")
 					.attr("id", tabtext + "-col-3")
 					.appendTo("#" +tabtext +"-row")
-					.addClass("col-md-4")
-					
+					.addClass("col-md-3")
+				
+				$("<div></div>")
+					.attr("id", tabtext + "-col-4")
+					.appendTo("#" +tabtext +"-row")
+					.addClass("col-md-3")	
 			
 			}
 	
@@ -308,7 +312,10 @@ getDomoticzVariables();
 		var col = 1;
 		devices.result.forEach(function(value,key){
 
+		if(value.Favorite != 0){
+		
 		//check if DOM elements for device.type exist
+		
 		switch(value.SwitchType){
 			
 			// break up categories into Type or SwitchType
@@ -399,12 +406,12 @@ getDomoticzVariables();
 				$("<a></a>")
 				.attr("id", category)
 				.appendTo("#" + category)
-				.addClass("list-group-item list-group-item-heading active")
+				.addClass("list-group-item list-group-item-heading active small")
 				.text(categoryLabel);
 			
 			// switch col
 				col = col+1;
-				if(col==4){col=1}
+				if(col==5){col=1}
 			
 				
 			}
@@ -416,26 +423,31 @@ getDomoticzVariables();
 					.attr("id", value.idx)
 					.addClass("list-group-item")
 					.appendTo("#"+category)
+					
+			$("<div></div>")
+					.attr("id", "line-"+value.idx)
+					.appendTo("#"+value.idx)
+					.addClass("clearfix list-group-item-text")
 			
 			$("<button></button>")
 					.attr("id", "button-"+value.idx)
 					.attr("data-toggle", "collapse")
 					.attr("data-target", "#popout-"+value.idx)
-					.appendTo("#"+value.idx)
-					.addClass("glyphicon glyphicon-chevron-right spaced btn btn-default btn-xs")
+					.appendTo("#line-"+value.idx)
+					.addClass("spaced pull-left glyphicon glyphicon-chevron-right btn btn-default btn-xs")
 			
 				$("<span></span>")
 					.attr("id", "name-"+value.idx)
-					.appendTo("#"+value.idx)
-					.addClass("list-group-item-text")
+					.appendTo("#line-"+value.idx)
+					.addClass("small pull-left")
 					.text(value.Name)
 			
 			// add data or status
 				
 				$("<span></span>")
 					.attr("id", "text-" + value.idx)
-					.appendTo("#"+value.idx)
-					.addClass("label label-info pull-right")
+					.appendTo("#line-"+value.idx)
+					.addClass("small pull-right")
 					.text(text)
 					
 			
@@ -463,15 +475,15 @@ getDomoticzVariables();
 			
 			$("<span></span>")
 				.appendTo("#popout-"+value.idx)
-				.addClass("label label-info spaced")
-				.text(value.LastUpdate)
+				.addClass("small")
+				.text("Updated: " + value.LastUpdate)
 
-			if(value.BatteryLevel <= 100){
+			if(value.BatteryLevel < 100){
 
 			$("<p></p>")
 				.appendTo("#popout-"+value.idx)
-				.addClass("label label-success spaced ion-battery-empty")
-				.text(value.BatteryLevel+"%")
+				.addClass("list-group-item-text small")
+				.text("Battery: " + value.BatteryLevel+"%")
 				
 				}
 					
@@ -482,12 +494,13 @@ getDomoticzVariables();
 			
 
 
-
+		}
 
 			
 			
 			
 		})
+	
 }
 
 
