@@ -335,6 +335,32 @@ getDomoticzVariables();
 		
 			// pretty cattegory labels AFTER defining
 		switch(category){
+
+			case "Dimmer":
+			var categoryClass = "fa fa-sliders"
+			break;
+			
+			case "Rain":
+			var categoryClass = "fa fa-tint"
+			break;
+
+
+			case "Blinds":
+			var categoryClass = "fa fa-unsorted"
+			break;
+			
+			case "P1Smartmeter":
+			var categoryClass = "fa fa-tasks"
+			break;
+			
+			case "Wind":
+			var categoryClass = "fa fa-compass"
+			break;
+			
+			case "Thermostat":
+			var categoryClass = "fa fa-tachometer"
+			break;
+
 			
 			case "Contact":
 			var categoryClass = "fa fa-unlink"
@@ -409,10 +435,10 @@ getDomoticzVariables();
 				$("<a></a>")
 				.attr("id", category+"-text")
 				.appendTo("#" + category)
-				.addClass("list-group-item active small")
+				.addClass("list-group-item active")
 								
 				$("<span></span>")
-				.attr("id", category+"-text")
+				.attr("id", category+"-icon")
 				.appendTo("#" + category + "-text")
 				.addClass(categoryClass)
 			
