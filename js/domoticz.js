@@ -403,7 +403,7 @@ getDomoticzVariables();
 			break;
 			
 			case "TempHumidityBaro":
-			var categoryClass = "fa fa-globe"
+			var categoryClass = "fa fa-sun-o"
 			break;
 			
 			case "Temp":
