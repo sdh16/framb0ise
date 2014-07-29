@@ -397,8 +397,6 @@ getDomoticzVariables();
 			break;			
 			
 		}	
-			
-			
 
 			// create the headings for each devicetype
 			if(!$("#" + category ).length) {
@@ -456,11 +454,45 @@ getDomoticzVariables();
 					.appendTo("#line-"+value.idx)
 					.addClass("small pull-right")
 					.text(text)
+				
+				$("<span></span>")
+					.attr("id", "icon-" + value.idx)
+					.appendTo("#line-"+value.idx)
+					.addClass("small pull-right")
+				
 					
 			
 			}
-				
 		
+			// create 'popouts'
+			if(!$("#popout-"+value.idx).length){
+			
+			$("<div></div>")
+				.attr("id", "popout-"+value.idx)
+				.appendTo("#"+value.idx)
+				.attr("data-parent", "#"+value.idx)
+				.addClass("spaced collapse well small")
+			
+			$("<p></p>")
+				.attr("id", "LastUpdate-"+value.idx)
+				.appendTo("#popout-"+value.idx)
+				.text(value.LastUpdate)
+				.addClass("list-group-item-text small")
+
+			if(value.BatteryLevel < 100){
+
+			$("<p></p>")
+				.attr("id", "BatteryStatus-"+value.idx)
+				.appendTo("#popout-"+value.idx)
+				.text(value.BatteryLevel)
+				.addClass("list-group-item-text small")
+				
+			}
+					
+					
+													
+			}
+			
 			// update text if not the same
 			if ($("#text-"+value.idx).text() != text){
 				
@@ -471,32 +503,20 @@ getDomoticzVariables();
 				
 			}
 			
-			// create more info stuff ?
-			if(!$("#popout-"+value.idx).length){
-			
-			$("<div></div>")
-				.attr("id", "popout-"+value.idx)
-				.appendTo("#"+value.idx)
-				.attr("data-parent", "#"+value.idx)
-				.addClass("spaced collapse well small")
-			
-			$("<p></p>")
-				.appendTo("#popout-"+value.idx)
-				.text("Updated: " + value.LastUpdate)
-				.addClass("list-group-item-text small")
-
-			if(value.BatteryLevel < 100){
-
-			$("<p></p>")
-				.appendTo("#popout-"+value.idx)
-				.text("Battery: " + value.BatteryLevel+"%")
-				.addClass("list-group-item-text small")
-				
-				}
-					
-					
-													
+			if ($("#LastUpdate-"+value.idx).text() != value.LastUpdate){				
+				$("#LastUpdate-"+value.idx)
+				.hide()
+				.text(value.LastUpdate)
+				.fadeIn(1500)				
 			}
+			
+			if ($("#BatteryStatus-"+value.idx).text() != value.BatteryStatus){				
+				$("#BatteryStatus-"+value.idx)
+				.hide()
+				.text(value.BatteryStatus)
+				.fadeIn(1500)
+			}
+
 			
 			
 
@@ -507,6 +527,9 @@ getDomoticzVariables();
 			
 			
 		})
+		
+		// stylize		
+		
 	
 }
 
@@ -552,11 +575,4 @@ $("#themes").change(function(){
     })	
 })	
 $('#Dashboard a[href="#tab-Dashboard"]').tab('show')
-
-$('button').click(function(){ //you can give id or class name here for $('button')
-    $(this).text(function(i,old){
-        return old=='+' ?  '-' : '+';
-    });
-});
-
 });
