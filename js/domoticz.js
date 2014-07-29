@@ -310,7 +310,7 @@ getDomoticzVariables();
 
 	//update dashboard
 	updateDomoticzDashboard = function(){
-		
+		timerDashboard = setTimeout(updateDomoticzDashboard, 5000)		
 
 		var devices = $.getUseddevices()
 		var col = 1;
@@ -520,7 +520,6 @@ $(document).ready(function() {
 $('.collapse').collapse()
 createDomoticzTabs()
 updateDomoticzSetup()
-updateDomoticzDashboard()
 
 // stop refreshing tabs when not in focus! 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
