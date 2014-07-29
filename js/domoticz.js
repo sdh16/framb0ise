@@ -425,7 +425,11 @@ getDomoticzVariables();
 				
 				$("<a></a>")
 					.attr("id", value.idx)
+					.attr("href", "#")
 					.addClass("list-group-item")
+					.attr("data-toggle", "collapse")
+					.attr("data-target", "#popout-"+value.idx)
+
 					.appendTo("#"+category)
 					
 			$("<div></div>")
@@ -433,13 +437,6 @@ getDomoticzVariables();
 					.appendTo("#"+value.idx)
 					.addClass("clearfix list-group-item-text")
 			
-			$("<button></button>")
-					.attr("id", "button-"+value.idx)
-					.attr("data-toggle", "collapse")
-					.attr("data-target", "#popout-"+value.idx)
-					.appendTo("#line-"+value.idx)
-					.addClass("spaced pull-left btn btn-primary btn-plus btn-xs")
-					.text("+")
 			
 				$("<span></span>")
 					.attr("id", "name-"+value.idx)
@@ -476,7 +473,7 @@ getDomoticzVariables();
 				.attr("id", "popout-"+value.idx)
 				.appendTo("#"+value.idx)
 				.attr("data-parent", "#"+value.idx)
-				.addClass("collapse well")
+				.addClass("spaced collapse well")
 			
 			$("<span></span>")
 				.appendTo("#popout-"+value.idx)
