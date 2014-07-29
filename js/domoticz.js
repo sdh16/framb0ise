@@ -337,35 +337,35 @@ getDomoticzVariables();
 		switch(category){
 			
 			case "Contact":
-			var categoryLabel = "Contacts"
+			var categoryClass = "fa fa-unlink"
 			break;
 			
 			case "TempHumidity":
-			var categoryLabel = "Temperature & Humidity"
+			var categoryClass = "fa fa-bar-chart-o"
 			break;
 			
 			case "SmokeDetector":
-			var categoryLabel = "Smoke Detectors"
+			var categoryClass = "glyphicon glyphicon-fire"
 			break;
 			
 			case "OnOff":
-			var categoryLabel = "Switches"
+			var categoryClass = "fa fa-power-off"
 			break;
 			
 			case "Security":
-			var categoryLabel = "Security Status"
+			var categoryClass = "fa fa-shield"
 			break;
 			
 			case "DuskSensor":
-			var categoryLabel = "Dusk Sensors"
+			var categoryClass = "fa fa-square"
 			break;
 			
 			case "General":
-			var categoryLabel = "System Status"
+			var categoryClass = "fa fa-desktop"
 			break;
 			
 			case "Usage":
-			var categoryLabel = "Current Usage"
+			var categoryClass = "fa fa-bolt"
 			break;
 			
 			case "Energy":
@@ -373,27 +373,27 @@ getDomoticzVariables();
 			break;
 			
 			case "YouLessMeter":
-			var categoryLabel = "Youless Sensors"
+			var categoryClass = "fa fa-home"
 			break;
 			
 			case "TempHumidityBaro":
-			var categoryLabel = "Temperature, Humidity & Pressure"
+			var categoryClass = "fa fa-globe"
 			break;
 			
 			case "Temp":
-			var categoryLabel = "Temperature"
+			var categoryClass = "fa fa-bar-chart-o"
 			break;
 			
 			case "MotionSensor":
-			var categoryLabel = "Motion Sensors"
+			var categoryClass = "fa fa-refresh"
 			break;
 			
 			case "Lux":
-			var categoryLabel = "Illuminance"
+			var categoryClass = "fa fa-bullseye"
 			break;
 			
 			default:
-			var categoryLabel = category
+			var categoryClass = "fa fa-question"
 			break;			
 			
 		}	
@@ -402,16 +402,21 @@ getDomoticzVariables();
 
 			// create the headings for each devicetype
 			if(!$("#" + category ).length) {
+				
 				$("<div></div>")
 				.attr("id", category)
 				.appendTo("#Dashboard-col-"+col)
 				.addClass("list-group")
 				
 				$("<a></a>")
-				.attr("id", category)
+				.attr("id", category+"-text")
 				.appendTo("#" + category)
-				.addClass("list-group-item list-group-item-heading active small")
-				.text(categoryLabel);
+				.addClass("list-group-item active small")
+								
+				$("<span></span>")
+				.attr("id", category+"-text")
+				.appendTo("#" + category + "-text")
+				.addClass(categoryClass)
 			
 			// switch col
 				col = col+1;
@@ -473,19 +478,19 @@ getDomoticzVariables();
 				.attr("id", "popout-"+value.idx)
 				.appendTo("#"+value.idx)
 				.attr("data-parent", "#"+value.idx)
-				.addClass("spaced collapse well")
+				.addClass("spaced collapse well small")
 			
-			$("<span></span>")
+			$("<p></p>")
 				.appendTo("#popout-"+value.idx)
-				.addClass("small")
 				.text("Updated: " + value.LastUpdate)
+				.addClass("list-group-item-text small")
 
 			if(value.BatteryLevel < 100){
 
 			$("<p></p>")
 				.appendTo("#popout-"+value.idx)
-				.addClass("list-group-item-text small")
 				.text("Battery: " + value.BatteryLevel+"%")
+				.addClass("list-group-item-text small")
 				
 				}
 					
