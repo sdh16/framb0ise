@@ -1,17 +1,15 @@
 framb0ise: A dashboard for Domoticz!
 =========
 
-Domoticz is great but the interface could be improved here and there. We understand and really like that the developers focus on adding functionality instead of making it look 'pretty'. 
+Domoticz is a great controller, but the interface could be improved here and there. We understand and really appreciate that the developers focus on adding functionality instead of making it look 'pretty'. 
  
-So we started a topic trying to get a team together, but the responses were not as we expected.
+So we started a topic trying to get a team together, but the responses weren't as we expected.
 
 We to took another approach: A little less conversation, a little more action please ... :)
- 
-We build a template, with minimal requirements which can be extend in the feature and maybe it can replace the current GUI.
 
-These are our first babysteps on JQuery / bootstrap / bootswatch / boilerplate / json / api.
+These are our first babysteps on JQuery / bootstrap / bootswatch / boilerplate / json / api, but we are fast learners.
 
-For now it aim's to be a skin/theme for Domoticz, but we try to get it as pluggable as possible.
+For now it aim's to be a skin/theme for Domoticz and we try to make it as pluggable as possible.
 
 =======
 Features
@@ -27,9 +25,11 @@ Minimal requirements because we use hosting features of Domoticz itself (nginx)
 =======
 Screenshots
 
+"Slate" theme:
 ![alt tag](https://raw.github.com/safi78/framb0ise/master/screenshots/dashboard.png)
-
+"Spacelab" theme:
 ![alt tag](https://raw.github.com/safi78/framb0ise/master/screenshots/temperature.png)
+
 
 =======
 What's needed
@@ -55,6 +55,9 @@ The open a browser and go to: http://[domoticz url or ip]:[port]/framb0ise/ (<--
 
 =======
 links:
+
 domoticz.com/
+
 domoticz.com/wiki
+
 domoticz.com/forum
