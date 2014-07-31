@@ -9,7 +9,7 @@ We to took another approach: A little less conversation, a little more action pl
 
 These are our first babysteps on JQuery / bootstrap / bootswatch / boilerplate / json / api, but we are fast learners.
 
-For now it aim's to be a skin/theme for Domoticz and we try to make it as pluggable as possible.
+For now it aim's to be ... well, AWESOME!
 
 =======
 Features
