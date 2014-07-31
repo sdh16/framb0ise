@@ -3,7 +3,7 @@ framb0ise: A dashboard for Domoticz!
 
 Domoticz is great but the interface could be improved here and there. We understand and really like that the developers focus on adding functionality instead of making it look 'pretty'. 
  
-So we started a topic trying to get a team together, but the responses were not as we exspected.
+So we started a topic trying to get a team together, but the responses were not as we expected.
 
 We to took another approach: A little less conversation, a little more action please ... :)
  
