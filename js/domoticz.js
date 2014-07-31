@@ -209,6 +209,7 @@
 		myTabs.Links = 1
 		myTabs.Dashboard = 1
 		myTabs.Rooms = 1
+		myTabs.Magic = 1
 		
 				
 
@@ -222,6 +223,55 @@
 			if(!$("#"+tabid).length){
 				tabid = index.replace("Enable", "")
 				tabtext = index.replace("EnableTab", "")
+				
+				switch(tabtext){
+					
+					case "Setup":
+					var tabclass = "fa fa-gears"
+					break;
+					
+					case "Links":
+					var tabclass = "fa fa-external-link"
+					break;
+					
+					case "Dashboard":
+					var tabclass = "fa fa-dashboard"
+					break;
+					
+					case "Rooms":
+					var tabclass = "fa fa-th-large"
+					break;
+					
+					case "Magic":
+					var tabclass = "fa fa-magic"
+					break;
+					
+					case "Lights":
+					var tabclass = "fa fa-power-off"
+					break;
+					
+					case "Scenes":
+					var tabclass = "fa fa-list-alt"
+					break;
+					
+					case "Temp":
+					var tabclass = "fa fa-bar-chart-o"
+					break;
+					
+					case "Utility":
+					var tabclass = "fa fa-home"
+					break;
+					
+					case "Weather":
+					var tabclass = "fa fa-sun-o"
+					break;
+					
+					default:
+					var tabclass = "fa fa-question"
+					break
+					
+				}
+				
 						
 				$("<li></li>")
 					.attr("id",tabid)
@@ -231,7 +281,8 @@
 					.appendTo("#"+tabid)
 					.attr("href", "#tab-"+tabtext)
 					.attr("data-toggle", "tab")
-					.text(tabtext)
+					.attr("title", tabtext)
+					.addClass(tabclass)
 					
 				$("<div></div>")
 					.attr("id", "tab-"+tabtext)
@@ -284,6 +335,7 @@
 		SetupTabs.Main = 1
 		SetupTabs.Theme = 1
 		SetupTabs.Variables = 1
+		SetupTabs.Links = 1
 		SetupTabs.Magical = 1
 		SetupTabs.Unicorns = 1
 		SetupTabs.Rainbows = 1
