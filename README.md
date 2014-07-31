@@ -24,9 +24,11 @@ Minimal requirements because we use hosting features of Domoticz itself (nginx)
 
 =======
 Screenshots
+Framb0ise incorporates all the bootswatch themes, here's a few examples:
 
 "Slate" theme:
 ![alt tag](https://raw.github.com/safi78/framb0ise/master/screenshots/dashboard.png)
+
 "Spacelab" theme:
 ![alt tag](https://raw.github.com/safi78/framb0ise/master/screenshots/temperature.png)
 
