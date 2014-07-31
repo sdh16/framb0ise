@@ -255,7 +255,7 @@
 					break;
 					
 					case "Temp":
-					var tabclass = "fa fa-bar-chart-o"
+					var tabclass = "ion ion-thermometer"
 					break;
 					
 					case "Utility":
@@ -470,7 +470,7 @@ getDomoticzVariables();
 			break;
 			
 			case "Rain":
-			var categoryClass = "fa fa-tint"
+			var categoryClass = "ion ion-umbrella"
 			break;
 
 
@@ -492,11 +492,11 @@ getDomoticzVariables();
 
 			
 			case "Contact":
-			var categoryClass = "fa fa-unlink"
+			var categoryClass = "ion ion-toggle"
 			break;
 			
 			case "TempHumidity":
-			var categoryClass = "fa fa-bar-chart-o"
+			var categoryClass = "ion ion-thermometer"
 			break;
 			
 			case "SmokeDetector":
@@ -516,15 +516,15 @@ getDomoticzVariables();
 			break;
 			
 			case "General":
-			var categoryClass = "fa fa-desktop"
+			var categoryClass = "ion ion-ios7-pulse-strong"
 			break;
 			
 			case "Usage":
-			var categoryClass = "fa fa-bolt"
+			var categoryClass = "ion ion-outlet"
 			break;
 			
 			case "Energy":
-			var categoryLabel = "Total Usage"
+			var categoryLabel = "ion ion-outlet"
 			break;
 			
 			case "YouLessMeter":
@@ -536,7 +536,7 @@ getDomoticzVariables();
 			break;
 			
 			case "Temp":
-			var categoryClass = "fa fa-bar-chart-o"
+			var categoryClass = "ion ion-thermometer"
 			break;
 			
 			case "MotionSensor":

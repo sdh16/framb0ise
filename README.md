@@ -3,7 +3,7 @@ framb0ise: A dashboard for Domoticz!
 
 Domoticz is great but the interface at the moment isn't.  
 So we started a topic to gather a team. But the animo was not as we exspected.
-Safi78 started to took another approach. instead or thinking/discuss and talk we started to script :)
+safi78 started to took another approach. instead or thinking/discuss and talk we started to script :)
 after a couple of talks with remb0, the goal was clear. 
 
 We build a template, with minimal requirements which can be extend in the feature and maybe it can replace the current GUI.
@@ -43,11 +43,11 @@ Linux (Ubuntu / Debian):
 
 Install GIT with apt-get install git-core
 
-'cd' to the domoticz/www/folder of your choosing.
+'cd' to the domoticz/www/framb0ise/ of your choosing.
 
 Run git clone https://github.com/safi78/framb0ise.git
 
-The open a browser and go to: http://[domoticz url or ip]:[port]/framb0ise
+The open a browser and go to: http://[domoticz url or ip]:[port]/framb0ise/ (<-- mind the trailing slash!)
 
 =======
 links:

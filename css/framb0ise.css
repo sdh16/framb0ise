@@ -5,10 +5,17 @@
 	margin-bottom: 5px;
 }
 
+
 .fa {
 	font-size: 25px;
+	
 }
 
 .glyphicon {
 	font-size: 25px;
+}
+
+.ion {
+	font-size: 25px;
+	min-width: 50px;
 }
