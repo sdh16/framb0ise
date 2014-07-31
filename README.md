@@ -24,6 +24,7 @@ Minimal requirements because we use hosting features of Domoticz itself (nginx)
 
 =======
 Screenshots
+
 Framb0ise incorporates all the bootswatch themes, here's a few examples:
 
 "Slate" theme:
@@ -37,9 +38,11 @@ Framb0ise incorporates all the bootswatch themes, here's a few examples:
 What's needed
 
 Finalize current milestones and continue.
-Talented (web)designers to make icons, logos or elements, to make the coolest GUI ever.
+
 Testers: to report bugs wishes and suggestions.
+
 Any ideas or code to make it better.
+
 To resume, if you have a skill, and wish to contibute: 
 
 Every Domoticz-fan: feel welcome, fork this repo, help out where you can!
