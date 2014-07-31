@@ -26,7 +26,7 @@ Screenshots
 
 ![alt tag](https://raw.github.com/safi78/framb0ise/master/screenshots/dashboard.png)
 
-![alt tag](https://raw.github.com/safi78/framb0ise/master/screenshots/temperature.png)
+![alt tag](https://www.github.com/safi78/framb0ise/master/screenshots/temperature.png)
 
 =======
 What's needed
