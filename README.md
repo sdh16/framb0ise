@@ -1,4 +1,4 @@
-framb0ise: A dashboard for Domoticz!
+framb0ise: An add-on for Domoticz!
 =========
 
 Domoticz is a great controller, but the interface could be improved here and there. We understand and really appreciate that the developers focus on adding functionality instead of making it look 'pretty'. 
