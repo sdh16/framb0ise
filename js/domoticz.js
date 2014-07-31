@@ -35,7 +35,7 @@
  	 var usedDevices = [];
  	 
  	 $.ajax({
-  			url: '/json.htm?type=devices&used=true&order=Name',
+  			url: '/json.htm?type=devices&used=true',
   			async: false,
   			dataType: 'json',
   			success: function (json) {
@@ -279,6 +279,83 @@
 	
 	// update Setup
 	updateDomoticzSetup = function(){
+	
+		var SetupTabs = {}
+		SetupTabs.Main = 1
+		SetupTabs.Theme = 1
+		SetupTabs.Variables = 1
+		SetupTabs.Magical = 1
+		SetupTabs.Unicorns = 1
+		SetupTabs.Rainbows = 1
+		SetupTabs.Stuff = 1
+		SetupTabs.Things = 1
+		SetupTabs.Bla = 1
+
+	
+	$("<ul></ul>")
+		.attr("id","setup-tabs")
+		.attr("role","tablist")
+		.addClass("nav nav-tabs")
+		.appendTo("#Setup-row")
+	
+	$("<div></div>")
+		.attr("id","setup-tabs-content")
+		.addClass("tab-content")
+		.appendTo("#Setup-row")
+	
+	$.map(SetupTabs,function(value,index){
+		if (value == "1"){
+		
+	$("<li></li>")
+		.attr("id", index+"-setup-tab")
+		.appendTo("#setup-tabs")
+		
+	$("<a></a>")
+		.appendTo("#" + index + "-setup-tab")
+		.attr("href","#" + index+"-setup-tab-content")
+		.attr("data-toggle", "tab")
+		.text(index)
+		
+	$("<div></div>")
+		.attr("id", index + "-setup-tab-content")
+		.addClass("tab-pane panel spaced")
+		.appendTo("#setup-tabs-content")
+	
+				$("<div></div>")
+					.attr("id", index+"-row")
+					.appendTo("#" + index + "-setup-tab-content")
+					.addClass("row container")
+			
+				$("<div></div>")
+					.attr("id", index + "-col-1")
+					.appendTo("#"+ index +"-row")
+					.addClass("col-md-3")
+					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
+
+		
+				$("<div></div>")
+					.attr("id", index + "-col-2")
+					.appendTo("#"+ index + "-row")
+					.addClass("col-md-3")
+					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
+		
+				$("<div></div>")
+					.attr("id", index + "-col-3")
+					.appendTo("#" + index +"-row")
+					.addClass("col-md-3")
+					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
+				
+				$("<div></div>")
+					.attr("id", index + "-col-4")
+					.appendTo("#" + index +"-row")
+					.addClass("col-md-3")	
+					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
+		
+				
+		}
+	})
+		
+	
 
 // themewatch
 getDomoticzVariables();
@@ -286,7 +363,7 @@ getDomoticzVariables();
 	$("<select/>")
 			.attr("id", "themes")
 			.addClass("form-control")
-			.appendTo("#Setup-col-1")
+			.appendTo("#Theme-col-1")
 			
 	// get & fill the select
 	$.get("http://api.bootswatch.com/3/", function (data) {
