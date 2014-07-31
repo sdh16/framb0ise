@@ -15,11 +15,19 @@ For now it aim's to be ... well, AWESOME!
 Features
 
 All devices and functionalities of domoticz
+
+Create virtual device-widgets with values of your Domoticz devices
+
 View all your IP Cameras on a single page
+
 Responsive design : Display fine on any Android/IOS tablet, phone and any modern (HTML5) web browser
+
 Multiple themes, and easily to build one on your own
+
 Fast loading
-No configuration
+
+Basic configuration
+
 Minimal requirements because we use hosting features of Domoticz itself (nginx)
 
 =======
