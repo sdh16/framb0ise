@@ -45,6 +45,24 @@
 	  return usedDevices;
  	 }
 
+ 	// get a used device's data
+ 	 $.getDevice = function(idx){
+ 	 var device = [];
+ 	 
+ 	 $.ajax({
+  			url: '/json.htm?type=devices&rid=' + idx,
+  			async: false,
+  			dataType: 'json',
+  			success: function (json) {
+	  		device = json;
+	  		}
+	  	});
+	  return device.result;
+ 	 }
+
+
+
+
  	//get all uservariables return as array
 	 $.getUservariables = function() {
 		var userVariables = [];
@@ -132,7 +150,6 @@
 
 // Funtions for the webinterface
 	
-
 	// fix forecastIO implementation ;)
 	function FixForecastIO(ForecastStr){
  var a = new Date();
@@ -320,12 +337,8 @@
 		}
 			
 		})
+
 		
-	}	
-	
-	//update switches
-	updateDomoiczSwitches = function(){
-		timerSwitches = setTimeout(updateDomoiczSwitches, 5000)
 	}
 	
 	// update Setup
@@ -333,16 +346,9 @@
 	
 		var SetupTabs = {}
 		SetupTabs.Main = 1
-		SetupTabs.Theme = 1
 		SetupTabs.Variables = 1
-		SetupTabs.Links = 1
-		SetupTabs.Magical = 1
-		SetupTabs.Unicorns = 1
-		SetupTabs.Rainbows = 1
-		SetupTabs.Stuff = 1
-		SetupTabs.Things = 1
-		SetupTabs.Bla = 1
-
+		SetupTabs.Links = 0
+		SetupTabs.Magic = 1
 	
 	$("<ul></ul>")
 		.attr("id","setup-tabs")
@@ -370,39 +376,33 @@
 		
 	$("<div></div>")
 		.attr("id", index + "-setup-tab-content")
-		.addClass("tab-pane panel spaced")
+		.addClass("tab-pane")
 		.appendTo("#setup-tabs-content")
 	
 				$("<div></div>")
 					.attr("id", index+"-row")
 					.appendTo("#" + index + "-setup-tab-content")
-					.addClass("row container")
+					.addClass("row")
 			
 				$("<div></div>")
 					.attr("id", index + "-col-1")
 					.appendTo("#"+ index +"-row")
 					.addClass("col-md-3")
-					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
-
 		
 				$("<div></div>")
 					.attr("id", index + "-col-2")
 					.appendTo("#"+ index + "-row")
 					.addClass("col-md-3")
-					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
-		
+
 				$("<div></div>")
 					.attr("id", index + "-col-3")
 					.appendTo("#" + index +"-row")
 					.addClass("col-md-3")
-					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
 				
 				$("<div></div>")
 					.attr("id", index + "-col-4")
 					.appendTo("#" + index +"-row")
-					.addClass("col-md-3")	
-					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
-		
+					.addClass("col-md-3")		
 				
 		}
 	})
@@ -411,11 +411,26 @@
 
 // themewatch
 getDomoticzVariables();
+
+			$("<div></div>")
+				.attr("id", "Main-setup-panel-1")
+				.appendTo("#Main-col-1")
+				.addClass("panel panel-default spaced")
+			
+			$("<div></div>")
+				.appendTo("#Main-setup-panel-1")
+				.addClass("panel panel-heading text-center")
+				.text("Theme")
+			
+			$("<div></div>")
+				.attr("id", "Main-setup-panel-body")
+				.appendTo("#Main-setup-panel-1")
+				.addClass("panel-body")
 	
-	$("<select/>")
-			.attr("id", "themes")
-			.addClass("form-control")
-			.appendTo("#Theme-col-1")
+			$("<select/>")
+				.attr("id", "themes")
+				.addClass("form-control")
+				.appendTo("#Main-setup-panel-body")
 			
 	// get & fill the select
 	$.get("http://api.bootswatch.com/3/", function (data) {
@@ -429,13 +444,176 @@ getDomoticzVariables();
 			}));
 		})
 
+$("#themes").change(function(){
+	
+	$.get("http://api.bootswatch.com/3/", function (data){
+		var themes = data.themes
+		var theme = themes[$("#themes").val()];
+		$("#bootswatch").attr("href", theme.css);
+		$.updateUservariable(domoticzidx.framb0ise_theme, "framb0ise_theme", 0, $("#themes").val());
+    })	
+})	
+
+
 		$("#themes").val(domoticzval.framb0ise_theme).change();	
+
+
 
 	})
 
-}
-		
+// Magic
+var widgets = {}
+var widget = {}
+var row = []
+
+			$("<div></div>")
+				.attr("id", "Magic-setup-panel-1")
+				.appendTo("#Magic-col-1")
+				.addClass("panel panel-default spaced")
+				
+			$("<div></div>")
+				.attr("id", "Magic-setup-widget-panel-1")
+				.appendTo("#Magic-col-2")
+				.addClass("panel panel-default spaced")
+			
+			$("<div></div>")
+				.attr("id", "Magic-setup-widget-panel-2")
+				.appendTo("#Magic-col-3")
+				.addClass("panel panel-default spaced")
+				.text("list of widgets here")
+			
+			$("<div></div>")
+				.attr("id","Magic-setup-widget-title")
+				.addClass("list-group")
+				.appendTo("#Magic-setup-widget-panel-1")
+			
+			$("<a></a>")
+				.attr("id","Magic-setup-widget-title-text")
+				.addClass("list-group-item 	active text-center")
+				.appendTo("#Magic-setup-widget-title")
+				.text("Widget Name")
+			
+			$("<div></div>")
+				.attr("id","Magic-setup-widget-body")
+				.appendTo("#Magic-setup-widget-title")
+			
+			$("<a></a>")
+				.attr("id","Magic-setup-widget-footer")
+				.addClass("list-group-item")
+				.appendTo("#Magic-setup-widget-title")
+			
+			$("<div></div>")
+				.appendTo("#Magic-setup-panel-2")
+				.addClass("panel panel-heading text-center")
+				.text("Create Widget")
+			
+			$("<div></div>")
+				.attr("id", "Magic-setup-panel-body")
+				.appendTo("#Magic-setup-panel-1")
+				.addClass("panel-body")
+			
+			$("<input></input>")
+				.attr("id","Magic-setup-widget-name")
+				.appendTo("#Magic-setup-panel-body")
+				.addClass("form-control spaced")
+				.val("Widget Name")
+								
+			$("<input></input>")
+				.attr("id","Magic-row-name")
+				.appendTo("#Magic-setup-panel-body")
+				.addClass("form-control spaced")
+				.val("Row Name")
+			
+			$("<select></select")
+				.attr("id","Magic-core-device-select")
+				.appendTo("#Magic-setup-panel-body")
+				.addClass("form-control spaced")
+				
+			var domoticzDevices = $.getUseddevices()
+			
+			domoticzDevices.result.forEach(function(value,index){
+				
+				$("#Magic-core-device-select").append($("<option/>",{
+					value: value.idx,
+					text: value.Name
+				}));
+			})
+
+			$("<select></select")
+				.attr("id","Magic-data-device-select")
+				.appendTo("#Magic-setup-panel-body")
+				.addClass("form-control spaced")
+				
+			$("<button></button")
+				.attr("id","Magic-core-device-adddata")
+				.appendTo("#Magic-setup-panel-body")
+				.addClass("btn btn-primary btn-xs")
+				.text("Add")
+			
+			$("<button></button")
+				.attr("id","Magic-save-widget")
+				.appendTo("#Magic-setup-widget-footer")
+				.addClass("btn btn-primary btn-xs")
+				.text("Save")
+
+
+
+$("#Magic-core-device-select").change(function(){
 	
+	$("#Magic-data-device-select").empty()
+	
+	var domoticzDeviceData = $.getDevice($("#Magic-core-device-select").val())
+	
+		$.map(domoticzDeviceData[0], function(value, index) {
+		
+		$("#Magic-data-device-select").append($("<option/>",{
+					value: index,
+					text: index
+				}));
+		 
+			
+		}); 
+	
+	
+    })	
+
+$( "#Magic-setup-widget-name").change(function() {
+  
+  $("#Magic-setup-widget-title-text")
+  	.text($("#Magic-setup-widget-name").val())
+  	
+  	widget.name = $("#Magic-setup-widget-name").val()
+  
+  
+});
+
+$( "#Magic-core-device-adddata" ).click(function() {
+  $("<a></a>")
+  	.addClass("list-group-item small")
+  	.text($("#Magic-row-name").val()+": "+$("#Magic-data-device-select").find(":selected").text()+" from "+$("#Magic-core-device-select").find(":selected").text())
+  	.appendTo("#Magic-setup-widget-body")
+
+
+	
+	row.push({
+		name: $("#Magic-row-name").val(),
+		idx : $("#Magic-core-device-select").val(),
+		value : $("#Magic-data-device-select").val()
+	})
+	
+	
+	
+	widget.rows= row  
+	
+	
+ var bla = JSON.stringify(widget)
+console.log(bla);
+  
+});				
+			
+
+
+}
 
 	//update dashboard
 	updateDomoticzDashboard = function(){
@@ -524,7 +702,7 @@ getDomoticzVariables();
 			break;
 			
 			case "Energy":
-			var categoryLabel = "ion ion-outlet"
+			var categoryClass = "ion ion-outlet"
 			break;
 			
 			case "YouLessMeter":
@@ -682,12 +860,7 @@ getDomoticzVariables();
 			
 			
 		})
-		
-		// stylize		
-		
-	
 }
-
 
 // !		
 		
@@ -717,17 +890,5 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		break;
 	}
 })
-
-
-
-$("#themes").change(function(){
-	
-	$.get("http://api.bootswatch.com/3/", function (data){
-		var themes = data.themes
-		var theme = themes[$("#themes").val()];
-		$("#bootswatch").attr("href", theme.css);
-		$.updateUservariable(domoticzidx.framb0ise_theme, "framb0ise_theme", 0, $("#themes").val());
-    })	
-})	
-$('#Dashboard a[href="#tab-Dashboard"]').tab('show')
+	$('#Dashboard a[href="#tab-Dashboard"]').tab('show')
 });
