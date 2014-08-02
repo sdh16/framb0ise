@@ -429,7 +429,7 @@ getDomoticzVariables();
 	
 			$("<select/>")
 				.attr("id", "themes")
-				.addClass("form-control")
+				.addClass("spaced selectpicker")
 				.appendTo("#Main-setup-panel-body")
 			
 	// get & fill the select
@@ -522,12 +522,13 @@ var row = []
 				.attr("id","Magic-row-name")
 				.appendTo("#Magic-setup-panel-body")
 				.addClass("form-control spaced")
-				.val("Row Name")
+				.val("Row Text")
 			
 			$("<select></select")
 				.attr("id","Magic-core-device-select")
 				.appendTo("#Magic-setup-panel-body")
-				.addClass("form-control spaced")
+				.addClass("spaced selectpicker")
+				.attr("data-live-search","true")
 				
 			var domoticzDevices = $.getUseddevices()
 			
@@ -542,7 +543,7 @@ var row = []
 			$("<select></select")
 				.attr("id","Magic-data-device-select")
 				.appendTo("#Magic-setup-panel-body")
-				.addClass("form-control spaced")
+				.addClass("spaced selectpicker")
 				
 			$("<button></button")
 				.attr("id","Magic-core-device-adddata")
@@ -568,11 +569,13 @@ $("#Magic-core-device-select").change(function(){
 		
 		$("#Magic-data-device-select").append($("<option/>",{
 					value: index,
-					text: index
+					text: value
 				}));
 		 
 			
-		}); 
+		});
+	
+	$('.selectpicker').selectpicker('refresh'); 
 	
 	
     })	
@@ -590,7 +593,7 @@ $( "#Magic-setup-widget-name").change(function() {
 $( "#Magic-core-device-adddata" ).click(function() {
   $("<a></a>")
   	.addClass("list-group-item small")
-  	.text($("#Magic-row-name").val()+": "+$("#Magic-data-device-select").find(":selected").text()+" from "+$("#Magic-core-device-select").find(":selected").text())
+  	.text($("#Magic-row-name").val()+" "+$("#Magic-data-device-select").find(":selected").text())
   	.appendTo("#Magic-setup-widget-body")
 
 
@@ -891,4 +894,5 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	}
 })
 	$('#Dashboard a[href="#tab-Dashboard"]').tab('show')
+	$('select').selectpicker();
 });
