@@ -429,7 +429,7 @@ getDomoticzVariables();
 	
 			$("<select/>")
 				.attr("id", "themes")
-				.addClass("spaced selectpicker")
+				.addClass("spaced")
 				.appendTo("#Main-setup-panel-body")
 			
 	// get & fill the select
@@ -457,7 +457,7 @@ $("#themes").change(function(){
 
 		$("#themes").val(domoticzval.framb0ise_theme).change();	
 
-
+$('#themes').selectpicker('refresh');
 
 	})
 
@@ -527,7 +527,7 @@ var row = []
 			$("<select></select")
 				.attr("id","Magic-core-device-select")
 				.appendTo("#Magic-setup-panel-body")
-				.addClass("spaced selectpicker")
+				.addClass("spaced")
 				.attr("data-live-search","true")
 				
 			var domoticzDevices = $.getUseddevices()
@@ -543,7 +543,7 @@ var row = []
 			$("<select></select")
 				.attr("id","Magic-data-device-select")
 				.appendTo("#Magic-setup-panel-body")
-				.addClass("spaced selectpicker")
+				.addClass("spaced")
 				
 			$("<button></button")
 				.attr("id","Magic-core-device-adddata")
@@ -575,7 +575,7 @@ $("#Magic-core-device-select").change(function(){
 			
 		});
 	
-	$('.selectpicker').selectpicker('refresh'); 
+	$('#Magic-data-device-select').selectpicker('refresh'); 
 	
 	
     })	
