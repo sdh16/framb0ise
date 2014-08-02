@@ -376,7 +376,7 @@
 		
 	$("<div></div>")
 		.attr("id", index + "-setup-tab-content")
-		.addClass("tab-pane")
+		.addClass("tab-pane spaced")
 		.appendTo("#setup-tabs-content")
 	
 				$("<div></div>")
@@ -415,17 +415,17 @@ getDomoticzVariables();
 			$("<div></div>")
 				.attr("id", "Main-setup-panel-1")
 				.appendTo("#Main-col-1")
-				.addClass("panel panel-default spaced")
+				.addClass("item-group")
 			
-			$("<div></div>")
+			$("<a></a>")
 				.appendTo("#Main-setup-panel-1")
-				.addClass("panel panel-heading text-center")
+				.addClass("list-group-item active text-center")
 				.text("Theme")
 			
-			$("<div></div>")
+			$("<a></a>")
 				.attr("id", "Main-setup-panel-body")
 				.appendTo("#Main-setup-panel-1")
-				.addClass("panel-body")
+				.addClass("list-group-item")
 	
 			$("<select/>")
 				.attr("id", "themes")
@@ -455,7 +455,7 @@ $("#themes").change(function(){
 })	
 
 
-		$("#themes").val(domoticzval.framb0ise_theme).change();	
+$("#themes").val(domoticzval.framb0ise_theme).change();	
 
 $('#themes').selectpicker('refresh');
 
@@ -466,156 +466,177 @@ var widgets = {}
 var widget = {}
 var row = []
 
+
+// create widget
+
 			$("<div></div>")
-				.attr("id", "Magic-setup-panel-1")
+				.attr("id", "Magic-setup-list-1")
 				.appendTo("#Magic-col-1")
-				.addClass("panel panel-default spaced")
-				
-			$("<div></div>")
-				.attr("id", "Magic-setup-widget-panel-1")
-				.appendTo("#Magic-col-2")
-				.addClass("panel panel-default spaced")
-			
-			$("<div></div>")
-				.attr("id", "Magic-setup-widget-panel-2")
-				.appendTo("#Magic-col-3")
-				.addClass("panel panel-default spaced")
-				.text("list of widgets here")
-			
-			$("<div></div>")
-				.attr("id","Magic-setup-widget-title")
 				.addClass("list-group")
-				.appendTo("#Magic-setup-widget-panel-1")
-			
+				
 			$("<a></a>")
-				.attr("id","Magic-setup-widget-title-text")
-				.addClass("list-group-item 	active text-center")
-				.appendTo("#Magic-setup-widget-title")
-				.text("Widget Name")
-			
-			$("<div></div>")
-				.attr("id","Magic-setup-widget-body")
-				.appendTo("#Magic-setup-widget-title")
-			
-			$("<a></a>")
-				.attr("id","Magic-setup-widget-footer")
-				.addClass("list-group-item")
-				.appendTo("#Magic-setup-widget-title")
-			
-			$("<div></div>")
-				.appendTo("#Magic-setup-panel-2")
-				.addClass("panel panel-heading text-center")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item active text-center")
 				.text("Create Widget")
 			
-			$("<div></div>")
-				.attr("id", "Magic-setup-panel-body")
-				.appendTo("#Magic-setup-panel-1")
-				.addClass("panel-body")
+			$("<a></a>")
+				.attr("id","Magic-setup-name-row")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item")
 			
 			$("<input></input>")
 				.attr("id","Magic-setup-widget-name")
-				.appendTo("#Magic-setup-panel-body")
-				.addClass("form-control spaced")
+				.appendTo("#Magic-setup-name-row")
+				.addClass("form-control")
 				.val("Widget Name")
 								
+			$( "#Magic-setup-widget-name").change(function() {
+  
+				$("#Magic-setup-widget-title-text")
+					.text($("#Magic-setup-widget-name").val())
+  	
+				widget.name = $("#Magic-setup-widget-name").val()
+  
+			});
+
+
+
+
+			$("<a></a>")
+				.attr("id","Magic-setup-row-row")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item")
+			
 			$("<input></input>")
 				.attr("id","Magic-row-name")
-				.appendTo("#Magic-setup-panel-body")
-				.addClass("form-control spaced")
+				.appendTo("#Magic-setup-row-row")
+				.addClass("form-control")
 				.val("Row Text")
-			
+
+
+
+				
+			$("<a></a>")
+				.attr("id","Magic-setup-select1-row")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item")
+
 			$("<select></select")
 				.attr("id","Magic-core-device-select")
-				.appendTo("#Magic-setup-panel-body")
-				.addClass("spaced")
+				.appendTo("#Magic-setup-select1-row")
 				.attr("data-live-search","true")
-				
+				.attr("title","Select one of your devices")
+
 			var domoticzDevices = $.getUseddevices()
 			
 			domoticzDevices.result.forEach(function(value,index){
 				
-				$("#Magic-core-device-select").append($("<option/>",{
-					value: value.idx,
-					text: value.Name
+			$("#Magic-core-device-select").append($("<option/>",{
+				value: value.idx,
+				text: value.Name
 				}));
 			})
 
+
+
+			$("#Magic-core-device-select").change(function(){
+				$("#Magic-data-device-select").empty()
+					
+				var domoticzDeviceData = $.getDevice($("#Magic-core-device-select").val())
+	
+				$.map(domoticzDeviceData[0], function(value, index) {
+		
+					$("#Magic-data-device-select").append($("<option/>",{
+						value: index,
+						text: value
+					}));
+				});
+	
+				$('#Magic-data-device-select').selectpicker('refresh'); 
+			})
+			
+	
+				
+
+			$("<a></a>")
+				.attr("id","Magic-setup-select2-row")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item")
+
 			$("<select></select")
 				.attr("id","Magic-data-device-select")
-				.appendTo("#Magic-setup-panel-body")
-				.addClass("spaced")
+				.appendTo("#Magic-setup-select2-row")
+
+			$("<a></a>")
+				.attr("id","Magic-setup-button1-row")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item")
 				
 			$("<button></button")
 				.attr("id","Magic-core-device-adddata")
-				.appendTo("#Magic-setup-panel-body")
+				.appendTo("#Magic-setup-button1-row")
 				.addClass("btn btn-primary btn-xs")
 				.text("Add")
+
+			$( "#Magic-core-device-adddata" ).click(function() {
+				
+				$("<a></a>")
+					.addClass("list-group-item small")
+					.text($("#Magic-row-name").val()+" "+$("#Magic-data-device-select").find(":selected").text())
+					.appendTo("#Magic-setup-widget-body")
+
+				row.push({
+					name: $("#Magic-row-name").val(),
+					idx : $("#Magic-core-device-select").val(),
+					value : $("#Magic-data-device-select").val()
+				})
+	
+	
+	
+			widget.rows= row  
+	
+	
+			var bla = JSON.stringify(widget)
+			console.log(bla);
+  
+			});				
+
+// example widget
+
+			$("<div></div>")
+				.attr("id", "Magic-setup-widget-list-2")
+				.appendTo("#Magic-col-2")
+				.addClass("list-group")
 			
+			$("<a></a>")
+				.attr("id","Magic-setup-widget-title-text")
+				.addClass("list-group-item 	active text-center")
+				.appendTo("#Magic-setup-widget-list-2")
+				.text("Widget Name")
+			
+			$("<div></div>")
+				.attr("id","Magic-setup-widget-body")
+				.appendTo("#Magic-setup-widget-list-2")
+			
+			$("<a></a>")
+				.attr("id","Magic-setup-button3-row")
+				.appendTo("#Magic-setup-widget-list-2")
+				.addClass("list-group-item")
+
 			$("<button></button")
 				.attr("id","Magic-save-widget")
-				.appendTo("#Magic-setup-widget-footer")
+				.appendTo("#Magic-setup-button3-row")
 				.addClass("btn btn-primary btn-xs")
 				.text("Save")
 
 
+// existing widgets
 
-$("#Magic-core-device-select").change(function(){
-	
-	$("#Magic-data-device-select").empty()
-	
-	var domoticzDeviceData = $.getDevice($("#Magic-core-device-select").val())
-	
-		$.map(domoticzDeviceData[0], function(value, index) {
-		
-		$("#Magic-data-device-select").append($("<option/>",{
-					value: index,
-					text: value
-				}));
-		 
-			
-		});
-	
-	$('#Magic-data-device-select').selectpicker('refresh'); 
-	
-	
-    })	
-
-$( "#Magic-setup-widget-name").change(function() {
-  
-  $("#Magic-setup-widget-title-text")
-  	.text($("#Magic-setup-widget-name").val())
-  	
-  	widget.name = $("#Magic-setup-widget-name").val()
-  
-  
-});
-
-$( "#Magic-core-device-adddata" ).click(function() {
-  $("<a></a>")
-  	.addClass("list-group-item small")
-  	.text($("#Magic-row-name").val()+" "+$("#Magic-data-device-select").find(":selected").text())
-  	.appendTo("#Magic-setup-widget-body")
-
-
-	
-	row.push({
-		name: $("#Magic-row-name").val(),
-		idx : $("#Magic-core-device-select").val(),
-		value : $("#Magic-data-device-select").val()
-	})
-	
-	
-	
-	widget.rows= row  
-	
-	
- var bla = JSON.stringify(widget)
-console.log(bla);
-  
-});				
-			
-
-
+			$("<div></div>")
+				.attr("id", "Magic-setup-widget-list-3")
+				.appendTo("#Magic-col-3")
+				.addClass("list-group-item active text-center")
+				.text("Widgets")
 }
 
 	//update dashboard
