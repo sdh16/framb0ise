@@ -191,6 +191,11 @@
 	//need to have the names & the idx's arond, want to minimize the for.Eache's, so this seems easy :P
 	// very sucky functions, needs fixing
 	getDomoticzVariables = function(){
+	
+	// change
+		domoticzUserVariables = $.getUservariables()	
+	// change
+		
 		domoticzval = {};
 		domoticzidx = {};
 		
@@ -219,14 +224,12 @@
 
 		// second call, buggy json :(
 		domoTabs = $.getActiveTabs()
-		domoTabs.Setup =1
-		domoTabs.Links = 1
 		
 		myTabs.Setup = 1
-		myTabs.Links = 1
+		myTabs.Links = 0
 		myTabs.Dashboard = 1
-		myTabs.Rooms = 1
-		myTabs.Magic = 1
+		myTabs.Rooms = 0
+		myTabs.Magic = 0
 		
 				
 
@@ -343,6 +346,7 @@
 	
 	// update Setup
 	updateDomoticzSetup = function(){
+	getDomoticzVariables();
 	
 		var SetupTabs = {}
 		SetupTabs.Main = 1
@@ -407,10 +411,63 @@
 		}
 	})
 		
-	
+
+// uservars
+			$("<table></table>")
+				.attr("id", "Variables-setup-table-1")
+				.appendTo("#Variables-setup-tab-content")
+				.addClass("table table-condensed")
+			
+			$("<thead><thead")
+				.attr("id","Variables-setup-thead-1")
+				.appendTo("#Variables-setup-table-1")
+			
+			$("<th></th>")
+				.appendTo("#Variables-setup-thead-1")
+				.text("idx")
+			$("<th></th>")
+				.appendTo("#Variables-setup-thead-1")
+				.text("Variable name")
+			$("<th></th>")
+				.appendTo("#Variables-setup-thead-1")
+				.text("Variable type")
+			$("<th></th>")
+				.appendTo("#Variables-setup-thead-1")
+				.text("Current value")
+			$("<th></th>")
+				.appendTo("#Variables-setup-thead-1")
+				.text("Last update")
+			
+			$("<tbody></tbody")
+				.attr("id","Variables-setup-tbody-1")
+				.appendTo("#Variables-setup-table-1")
+			
+			domoticzUserVariables.result.forEach(function(value, index){
+				
+				$("<tr></tr>")
+					.attr("id","Variables-setup-row"+index)
+					.appendTo("#Variables-setup-tbody-1")
+				$("<td></td>")
+					.appendTo("#Variables-setup-row"+index)
+					.text(value.idx)
+				$("<td></td>")
+					.appendTo("#Variables-setup-row"+index)
+					.text(value.Name)
+				$("<td></td>")
+					.appendTo("#Variables-setup-row"+index)
+					.text(value.Type)
+				$("<td></td>")
+					.appendTo("#Variables-setup-row"+index)
+					.text(value.Value)
+				$("<td></td>")
+					.appendTo("#Variables-setup-row"+index)
+					.text(value.LastUpdate)
+			})
+				
+
+
 
 // themewatch
-getDomoticzVariables();
 
 			$("<div></div>")
 				.attr("id", "Main-setup-panel-1")
@@ -512,9 +569,6 @@ var row = []
 				.appendTo("#Magic-setup-row-row")
 				.addClass("form-control")
 				.val("Row Text")
-
-
-
 				
 			$("<a></a>")
 				.attr("id","Magic-setup-select1-row")
@@ -591,10 +645,7 @@ var row = []
 					value : $("#Magic-data-device-select").val()
 				})
 	
-	
-	
-			widget.rows= row  
-	
+			widget.rows= row  	
 	
 			var bla = JSON.stringify(widget)
 			console.log(bla);
@@ -898,12 +949,16 @@ updateDomoticzSetup()
 
 // stop refreshing tabs when not in focus! 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-
+//alert(e.target.hash)
 	// set and clear timers
 
 	switch(e.target.hash){
 		case "#tab-Dashboard":
-		timerDashboard = setTimeout(updateDomoticzDashboard, 5000)
+		updateDomoticzDashboard()
+		break;
+		
+		case "#Variables-setup-tab-content":
+		getDomoticzVariables()
 		break;
 	}
 
