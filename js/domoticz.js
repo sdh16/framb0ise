@@ -45,6 +45,24 @@
 	  return usedDevices;
  	 }
 
+ 	// get a used device's data
+ 	 $.getDevice = function(idx){
+ 	 var device = [];
+ 	 
+ 	 $.ajax({
+  			url: '/json.htm?type=devices&rid=' + idx,
+  			async: false,
+  			dataType: 'json',
+  			success: function (json) {
+	  		device = json;
+	  		}
+	  	});
+	  return device.result;
+ 	 }
+
+
+
+
  	//get all uservariables return as array
 	 $.getUservariables = function() {
 		var userVariables = [];
@@ -132,7 +150,6 @@
 
 // Funtions for the webinterface
 	
-
 	// fix forecastIO implementation ;)
 	function FixForecastIO(ForecastStr){
  var a = new Date();
@@ -174,6 +191,11 @@
 	//need to have the names & the idx's arond, want to minimize the for.Eache's, so this seems easy :P
 	// very sucky functions, needs fixing
 	getDomoticzVariables = function(){
+	
+	// change
+		domoticzUserVariables = $.getUservariables()	
+	// change
+		
 		domoticzval = {};
 		domoticzidx = {};
 		
@@ -202,14 +224,12 @@
 
 		// second call, buggy json :(
 		domoTabs = $.getActiveTabs()
-		domoTabs.Setup =1
-		domoTabs.Links = 1
 		
 		myTabs.Setup = 1
-		myTabs.Links = 1
+		myTabs.Links = 0
 		myTabs.Dashboard = 1
-		myTabs.Rooms = 1
-		myTabs.Magic = 1
+		myTabs.Rooms = 0
+		myTabs.Magic = 0
 		
 				
 
@@ -320,29 +340,19 @@
 		}
 			
 		})
+
 		
-	}	
-	
-	//update switches
-	updateDomoiczSwitches = function(){
-		timerSwitches = setTimeout(updateDomoiczSwitches, 5000)
 	}
 	
 	// update Setup
 	updateDomoticzSetup = function(){
+	getDomoticzVariables();
 	
 		var SetupTabs = {}
 		SetupTabs.Main = 1
-		SetupTabs.Theme = 1
 		SetupTabs.Variables = 1
-		SetupTabs.Links = 1
-		SetupTabs.Magical = 1
-		SetupTabs.Unicorns = 1
-		SetupTabs.Rainbows = 1
-		SetupTabs.Stuff = 1
-		SetupTabs.Things = 1
-		SetupTabs.Bla = 1
-
+		SetupTabs.Links = 0
+		SetupTabs.Magic = 1
 	
 	$("<ul></ul>")
 		.attr("id","setup-tabs")
@@ -370,52 +380,114 @@
 		
 	$("<div></div>")
 		.attr("id", index + "-setup-tab-content")
-		.addClass("tab-pane panel spaced")
+		.addClass("tab-pane spaced")
 		.appendTo("#setup-tabs-content")
 	
 				$("<div></div>")
 					.attr("id", index+"-row")
 					.appendTo("#" + index + "-setup-tab-content")
-					.addClass("row container")
+					.addClass("row")
 			
 				$("<div></div>")
 					.attr("id", index + "-col-1")
 					.appendTo("#"+ index +"-row")
 					.addClass("col-md-3")
-					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
-
 		
 				$("<div></div>")
 					.attr("id", index + "-col-2")
 					.appendTo("#"+ index + "-row")
 					.addClass("col-md-3")
-					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
-		
+
 				$("<div></div>")
 					.attr("id", index + "-col-3")
 					.appendTo("#" + index +"-row")
 					.addClass("col-md-3")
-					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
 				
 				$("<div></div>")
 					.attr("id", index + "-col-4")
 					.appendTo("#" + index +"-row")
-					.addClass("col-md-3")	
-					.html("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.")
-		
+					.addClass("col-md-3")		
 				
 		}
 	})
 		
-	
+
+// uservars
+			$("<table></table>")
+				.attr("id", "Variables-setup-table-1")
+				.appendTo("#Variables-setup-tab-content")
+				.addClass("table table-condensed")
+			
+			$("<thead><thead")
+				.attr("id","Variables-setup-thead-1")
+				.appendTo("#Variables-setup-table-1")
+			
+			$("<th></th>")
+				.appendTo("#Variables-setup-thead-1")
+				.text("idx")
+			$("<th></th>")
+				.appendTo("#Variables-setup-thead-1")
+				.text("Variable name")
+			$("<th></th>")
+				.appendTo("#Variables-setup-thead-1")
+				.text("Variable type")
+			$("<th></th>")
+				.appendTo("#Variables-setup-thead-1")
+				.text("Current value")
+			$("<th></th>")
+				.appendTo("#Variables-setup-thead-1")
+				.text("Last update")
+			
+			$("<tbody></tbody")
+				.attr("id","Variables-setup-tbody-1")
+				.appendTo("#Variables-setup-table-1")
+			
+			domoticzUserVariables.result.forEach(function(value, index){
+				
+				$("<tr></tr>")
+					.attr("id","Variables-setup-row"+index)
+					.appendTo("#Variables-setup-tbody-1")
+				$("<td></td>")
+					.appendTo("#Variables-setup-row"+index)
+					.text(value.idx)
+				$("<td></td>")
+					.appendTo("#Variables-setup-row"+index)
+					.text(value.Name)
+				$("<td></td>")
+					.appendTo("#Variables-setup-row"+index)
+					.text(value.Type)
+				$("<td></td>")
+					.appendTo("#Variables-setup-row"+index)
+					.text(value.Value)
+				$("<td></td>")
+					.appendTo("#Variables-setup-row"+index)
+					.text(value.LastUpdate)
+			})
+				
+
+
 
 // themewatch
-getDomoticzVariables();
+
+			$("<div></div>")
+				.attr("id", "Main-setup-panel-1")
+				.appendTo("#Main-col-1")
+				.addClass("item-group")
+			
+			$("<a></a>")
+				.appendTo("#Main-setup-panel-1")
+				.addClass("list-group-item active text-center")
+				.text("Theme")
+			
+			$("<a></a>")
+				.attr("id", "Main-setup-panel-body")
+				.appendTo("#Main-setup-panel-1")
+				.addClass("list-group-item")
 	
-	$("<select/>")
-			.attr("id", "themes")
-			.addClass("form-control")
-			.appendTo("#Theme-col-1")
+			$("<select/>")
+				.attr("id", "themes")
+				.addClass("spaced")
+				.appendTo("#Main-setup-panel-body")
 			
 	// get & fill the select
 	$.get("http://api.bootswatch.com/3/", function (data) {
@@ -429,13 +501,194 @@ getDomoticzVariables();
 			}));
 		})
 
-		$("#themes").val(domoticzval.framb0ise_theme).change();	
+$("#themes").change(function(){
+	
+	$.get("http://api.bootswatch.com/3/", function (data){
+		var themes = data.themes
+		var theme = themes[$("#themes").val()];
+		$("#bootswatch").attr("href", theme.css);
+		$.updateUservariable(domoticzidx.framb0ise_theme, "framb0ise_theme", 0, $("#themes").val());
+    })	
+})	
+
+
+$("#themes").val(domoticzval.framb0ise_theme).change();	
+
+$('#themes').selectpicker('refresh');
 
 	})
 
-}
-		
+// Magic
+var widgets = {}
+var widget = {}
+var row = []
+
+
+// create widget
+
+			$("<div></div>")
+				.attr("id", "Magic-setup-list-1")
+				.appendTo("#Magic-col-1")
+				.addClass("list-group")
+				
+			$("<a></a>")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item active text-center")
+				.text("Create Widget")
+			
+			$("<a></a>")
+				.attr("id","Magic-setup-name-row")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item")
+			
+			$("<input></input>")
+				.attr("id","Magic-setup-widget-name")
+				.appendTo("#Magic-setup-name-row")
+				.addClass("form-control")
+				.val("Widget Name")
+								
+			$( "#Magic-setup-widget-name").change(function() {
+  
+				$("#Magic-setup-widget-title-text")
+					.text($("#Magic-setup-widget-name").val())
+  	
+				widget.name = $("#Magic-setup-widget-name").val()
+  
+			});
+
+
+
+
+			$("<a></a>")
+				.attr("id","Magic-setup-row-row")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item")
+			
+			$("<input></input>")
+				.attr("id","Magic-row-name")
+				.appendTo("#Magic-setup-row-row")
+				.addClass("form-control")
+				.val("Row Text")
+				
+			$("<a></a>")
+				.attr("id","Magic-setup-select1-row")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item")
+
+			$("<select></select")
+				.attr("id","Magic-core-device-select")
+				.appendTo("#Magic-setup-select1-row")
+				.attr("data-live-search","true")
+				.attr("title","Select one of your devices")
+
+			var domoticzDevices = $.getUseddevices()
+			
+			domoticzDevices.result.forEach(function(value,index){
+				
+			$("#Magic-core-device-select").append($("<option/>",{
+				value: value.idx,
+				text: value.Name
+				}));
+			})
+
+
+
+			$("#Magic-core-device-select").change(function(){
+				$("#Magic-data-device-select").empty()
+					
+				var domoticzDeviceData = $.getDevice($("#Magic-core-device-select").val())
 	
+				$.map(domoticzDeviceData[0], function(value, index) {
+		
+					$("#Magic-data-device-select").append($("<option/>",{
+						value: index,
+						text: value
+					}));
+				});
+	
+				$('#Magic-data-device-select').selectpicker('refresh'); 
+			})
+			
+	
+				
+
+			$("<a></a>")
+				.attr("id","Magic-setup-select2-row")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item")
+
+			$("<select></select")
+				.attr("id","Magic-data-device-select")
+				.appendTo("#Magic-setup-select2-row")
+
+			$("<a></a>")
+				.attr("id","Magic-setup-button1-row")
+				.appendTo("#Magic-setup-list-1")
+				.addClass("list-group-item")
+				
+			$("<button></button")
+				.attr("id","Magic-core-device-adddata")
+				.appendTo("#Magic-setup-button1-row")
+				.addClass("btn btn-primary btn-xs")
+				.text("Add")
+
+			$( "#Magic-core-device-adddata" ).click(function() {
+				
+				$("<a></a>")
+					.addClass("list-group-item small")
+					.text($("#Magic-row-name").val()+" "+$("#Magic-data-device-select").find(":selected").text())
+					.appendTo("#Magic-setup-widget-body")
+
+				row.push({
+					name: $("#Magic-row-name").val(),
+					idx : $("#Magic-core-device-select").val(),
+					value : $("#Magic-data-device-select").val()
+				})
+	
+			widget.rows= row  	
+	
+			var bla = JSON.stringify(widget)
+			console.log(bla);
+  
+			});				
+
+// example widget
+
+			$("<div></div>")
+				.attr("id", "Magic-setup-widget-list-2")
+				.appendTo("#Magic-col-2")
+				.addClass("list-group")
+			
+			$("<a></a>")
+				.attr("id","Magic-setup-widget-title-text")
+				.addClass("list-group-item 	active text-center")
+				.appendTo("#Magic-setup-widget-list-2")
+				.text("Widget Name")
+			
+			$("<div></div>")
+				.attr("id","Magic-setup-widget-body")
+				.appendTo("#Magic-setup-widget-list-2")
+			
+			$("<a></a>")
+				.attr("id","Magic-setup-button3-row")
+				.appendTo("#Magic-setup-widget-list-2")
+				.addClass("list-group-item")
+
+			$("<button></button")
+				.attr("id","Magic-save-widget")
+				.appendTo("#Magic-setup-button3-row")
+				.addClass("btn btn-primary btn-xs")
+				.text("Save")
+
+
+// existing widgets
+
+			$("<div></div>")
+				.attr("id", "Magic-setup-widget-list-3")
+				.appendTo("#Magic-col-3")
+				.addClass("list-group-item active text-center")
+				.text("Widgets")
+}
 
 	//update dashboard
 	updateDomoticzDashboard = function(){
@@ -524,7 +777,7 @@ getDomoticzVariables();
 			break;
 			
 			case "Energy":
-			var categoryLabel = "ion ion-outlet"
+			var categoryClass = "ion ion-outlet"
 			break;
 			
 			case "YouLessMeter":
@@ -682,12 +935,7 @@ getDomoticzVariables();
 			
 			
 		})
-		
-		// stylize		
-		
-	
 }
-
 
 // !		
 		
@@ -701,12 +949,16 @@ updateDomoticzSetup()
 
 // stop refreshing tabs when not in focus! 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-
+//alert(e.target.hash)
 	// set and clear timers
 
 	switch(e.target.hash){
 		case "#tab-Dashboard":
-		timerDashboard = setTimeout(updateDomoticzDashboard, 5000)
+		updateDomoticzDashboard()
+		break;
+		
+		case "#Variables-setup-tab-content":
+		getDomoticzVariables()
 		break;
 	}
 
@@ -717,17 +969,6 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		break;
 	}
 })
-
-
-
-$("#themes").change(function(){
-	
-	$.get("http://api.bootswatch.com/3/", function (data){
-		var themes = data.themes
-		var theme = themes[$("#themes").val()];
-		$("#bootswatch").attr("href", theme.css);
-		$.updateUservariable(domoticzidx.framb0ise_theme, "framb0ise_theme", 0, $("#themes").val());
-    })	
-})	
-$('#Dashboard a[href="#tab-Dashboard"]').tab('show')
+	$('#Dashboard a[href="#tab-Dashboard"]').tab('show')
+	$('select').selectpicker();
 });
