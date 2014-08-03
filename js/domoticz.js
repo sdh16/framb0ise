@@ -229,6 +229,7 @@
 		myTabs.Setup = 1
 		myTabs.Links = 0
 		myTabs.Dashboard = 1
+		myTabs.DashboardNew = 1
 		myTabs.Rooms = 0
 		myTabs.Magic = 0
 		
@@ -259,6 +260,10 @@
 					var tabclass = "fa fa-dashboard"
 					break;
 					
+					case "DashboardNew":
+					var tabclass = "fa fa-dashboard"
+					break;
+
 					case "Rooms":
 					var tabclass = "fa fa-th-large"
 					break;
@@ -354,6 +359,8 @@
 		SetupTabs.Variables = 1
 		SetupTabs.Links = 0
 		SetupTabs.Magic = 1
+		SetupTabs.Devices = 1
+
 	
 	$("<ul></ul>")
 		.attr("id","setup-tabs")
@@ -481,6 +488,72 @@
 		
 		}
 
+// device list
+			$("<button></button>")
+				.attr("id","Devices-refresh-button")
+				.appendTo("#Devices-col-1")
+				.text("refresh")
+				.addClass("btn btn-primary btn-xs")
+				.click(function(){refreshDevicesTable()})
+		
+			$("<table></table>")
+				.attr("id", "Devices-setup-table-1")
+				.appendTo("#Devices-setup-tab-content")
+				.addClass("table table-condensed")
+			
+			$("<thead><thead")
+				.attr("id","Devices-setup-thead-1")
+				.appendTo("#Devices-setup-table-1")
+			
+			$("<th></th>")
+				.appendTo("#Devices-setup-thead-1")
+				.text("idx")
+			$("<th></th>")
+				.appendTo("#Devices-setup-thead-1")
+				.text("Device name")
+			$("<th></th>")
+				.appendTo("#Devices-setup-thead-1")
+				.text("Device type")
+			$("<th></th>")
+				.appendTo("#Devices-setup-thead-1")
+				.text("Current value")
+			$("<th></th>")
+				.appendTo("#Devices-setup-thead-1")
+				.text("Last update")
+
+		refreshDevicesTable = function(){
+			var devices = $.getUseddevices()
+			
+			$("#Devices-setup-table-1 > tbody").remove()	
+
+			$("<tbody></tbody")
+				.attr("id","Devices-setup-tbody-1")
+				.appendTo("#Devices-setup-table-1")
+
+			devices.result.forEach(function(value,index){
+
+				
+				$("<tr></tr>")
+					.attr("id","Devices-setup-row"+index)
+					.appendTo("#Devices-setup-tbody-1")
+				$("<td></td>")
+					.appendTo("#Devices-setup-row"+index)
+					.text(value.idx)
+				$("<td></td>")
+					.appendTo("#Devices-setup-row"+index)
+					.text(value.Name)
+				$("<td></td>")
+					.appendTo("#Devices-setup-row"+index)
+					.text(value.Type)
+				$("<td></td>")
+					.appendTo("#Devices-setup-row"+index)
+					.text(value.Data)
+				$("<td></td>")
+					.appendTo("#Devices-setup-row"+index)
+					.text(value.LastUpdate)
+			})
+		
+		}
 
 // themewatch
 
@@ -736,6 +809,270 @@ domoticzUserVariables.result.forEach(function(value, index){
 				.text("Widgets")
 }
 
+	//update lights
+	updateDomoticzDashboardNew = function(){
+		var deviceidx
+		timerDashboardNew = setTimeout(updateDomoticzDashboardNew, 5000)	
+
+		var domoticzUserVariables = $.getUservariables()
+		domoticzUserVariables.result.forEach(function(value, index){
+					
+			if(value.Name == "sd_STB"){
+				var value = value.Value
+				var idx = value.idx
+				//alert (idx)
+				//alert (value)
+				deviceidx = value.split(",")
+			}
+		})
+
+		for(i = 1; i < deviceidx.length; i++) {
+			var device = $.getDevice(deviceidx[i])
+			var col = 1;
+			$.map(device, function(value, key) {
+				var text = value.Data
+			//})
+		//}
+		//var devices = $.getUseddevices()
+		//var col = 1;
+		//devices.result.forEach(function(value,key){
+
+		if(value.Favorite != 0){
+		
+		//check if DOM elements for device.type exist
+		
+		switch(value.SwitchType){
+			
+			// break up categories into Type or SwitchType
+			case undefined:
+			var category = value.Type.replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
+			var text = value.Data
+			break;
+			
+			default:
+			var category = value.SwitchType.replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
+			var text = value.Status
+		}
+		
+			// pretty cattegory labels AFTER defining
+		switch(category){
+
+			case "Dimmer":
+			var categoryClass = "fa fa-sliders"
+			break;
+			
+			case "Rain":
+			var categoryClass = "ion ion-umbrella"
+			break;
+
+
+			case "Blinds":
+			var categoryClass = "fa fa-unsorted"
+			break;
+			
+			case "P1Smartmeter":
+			var categoryClass = "fa fa-tasks"
+			break;
+			
+			case "Wind":
+			var categoryClass = "fa fa-compass"
+			break;
+			
+			case "Thermostat":
+			var categoryClass = "fa fa-tachometer"
+			break;
+
+			
+			case "Contact":
+			var categoryClass = "ion ion-toggle"
+			break;
+			
+			case "TempHumidity":
+			var categoryClass = "ion ion-thermometer"
+			break;
+			
+			case "SmokeDetector":
+			var categoryClass = "glyphicon glyphicon-fire"
+			break;
+			
+			case "OnOff":
+			var categoryClass = "fa fa-power-off"
+			break;
+			
+			case "Security":
+			var categoryClass = "fa fa-shield"
+			break;
+			
+			case "DuskSensor":
+			var categoryClass = "fa fa-square"
+			break;
+			
+			case "General":
+			var categoryClass = "ion ion-ios7-pulse-strong"
+			break;
+			
+			case "Usage":
+			var categoryClass = "ion ion-outlet"
+			break;
+			
+			case "Energy":
+			var categoryClass = "ion ion-outlet"
+			break;
+			
+			case "YouLessMeter":
+			var categoryClass = "fa fa-home"
+			break;
+			
+			case "TempHumidityBaro":
+			var categoryClass = "fa fa-sun-o"
+			break;
+			
+			case "Temp":
+			var categoryClass = "ion ion-thermometer"
+			break;
+			
+			case "MotionSensor":
+			var categoryClass = "fa fa-refresh"
+			break;
+			
+			case "Lux":
+			var categoryClass = "fa fa-bullseye"
+			break;
+			
+			default:
+			var categoryClass = "fa fa-question"
+			break;			
+			
+		}	
+
+			// create the headings for each devicetype
+			if(!$("#" + category ).length) {
+				
+				$("<div></div>")
+				.attr("id", category)
+				.appendTo("#DashboardNew-col-"+col)
+				.addClass("list-group")
+				
+				$("<a></a>")
+				.attr("id", category+"-text")
+				.appendTo("#" + category)
+				.addClass("list-group-item active")
+								
+				$("<span></span>")
+				.attr("id", category+"-icon")
+				.appendTo("#" + category + "-text")
+				.addClass(categoryClass)
+			
+			// switch col
+				col = col+1;
+				if(col==5){col=1}
+			
+				
+			}
+			
+			// create a row for each device
+			if(!$("#" + value.idx).length){
+				
+				$("<a></a>")
+					.attr("id", value.idx)
+					.attr("href", "#")
+					.addClass("list-group-item")
+					.attr("data-toggle", "collapse")
+					.attr("data-target", "#popout-"+value.idx)
+
+					.appendTo("#"+category)
+					
+			$("<div></div>")
+					.attr("id", "line-"+value.idx)
+					.appendTo("#"+value.idx)
+					.addClass("clearfix list-group-item-text")
+			
+			
+				$("<span></span>")
+					.attr("id", "name-"+value.idx)
+					.appendTo("#line-"+value.idx)
+					.addClass("small pull-left")
+					.text(value.Name)
+			
+			// add data or status
+				
+				$("<span></span>")
+					.attr("id", "text-" + value.idx)
+					.appendTo("#line-"+value.idx)
+					.addClass("small pull-right")
+					.text(text)
+				
+				$("<span></span>")
+					.attr("id", "icon-" + value.idx)
+					.appendTo("#line-"+value.idx)
+					.addClass("small pull-right")
+				
+					
+			
+			}
+		
+			// create 'popouts'
+			if(!$("#popout-"+value.idx).length){
+			
+			$("<div></div>")
+				.attr("id", "popout-"+value.idx)
+				.appendTo("#"+value.idx)
+				.attr("data-parent", "#"+value.idx)
+				.addClass("spaced collapse well small")
+			
+			$("<p></p>")
+				.attr("id", "LastUpdate-"+value.idx)
+				.appendTo("#popout-"+value.idx)
+				.text(value.LastUpdate)
+				.addClass("list-group-item-text small")
+
+			if(value.BatteryLevel < 100){
+
+			$("<p></p>")
+				.attr("id", "BatteryStatus-"+value.idx)
+				.appendTo("#popout-"+value.idx)
+				.text(value.BatteryLevel)
+				.addClass("list-group-item-text small")
+				
+			}
+					
+					
+													
+			}
+			
+			// update text if not the same
+			if ($("#text-"+value.idx).text() != text){
+				
+				$("#text-"+value.idx)
+				.hide()
+				.text(text)
+				.fadeIn(1500)
+				
+			}
+			
+			if ($("#LastUpdate-"+value.idx).text() != value.LastUpdate){				
+				$("#LastUpdate-"+value.idx)
+				.hide()
+				.text(value.LastUpdate)
+				.fadeIn(1500)				
+			}
+			
+			if ($("#BatteryStatus-"+value.idx).text() != value.BatteryStatus){				
+				$("#BatteryStatus-"+value.idx)
+				.hide()
+				.text(value.BatteryStatus)
+				.fadeIn(1500)
+			}
+
+			
+			
+
+
+		}
+
+		})
+		} //SD For Loop
+}
 	//update dashboard
 	updateDomoticzDashboard = function(){
 		timerDashboard = setTimeout(updateDomoticzDashboard, 5000)		
@@ -1004,10 +1341,18 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		updateDomoticzDashboard()
 		break;
 		
+		case "#tab-DashboardNew":
+		updateDomoticzDashboardNew()
+		break;
+		
 		case "#Variables-setup-tab-content":
 		refreshVariablesTable()
 		break;
 		
+		case "#Devices-setup-tab-content":
+		refreshDevicesTable()
+		break;
+
 		default:
 		break;
 	}
@@ -1017,6 +1362,10 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		
 		case "#tab-Dashboard":
 		clearTimeout(timerDashboard)
+		break;
+		
+		case "#tab-DashboardNew":
+		clearTimeout(timerDashboardNew)
 		break;
 		
 		default:
