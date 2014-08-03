@@ -193,7 +193,8 @@
 	getDomoticzVariables = function(){
 	
 	// change
-		domoticzUserVariables = $.getUservariables()	
+		domoticzUserVariables = $.getUservariables()
+		if (!domoticzUserVariables.result.framb0ise_widgets){$.saveUservariable("framb0ise_widgets", 2, "{widgets:0}")}
 	// change
 		
 		domoticzval = {};
@@ -413,6 +414,13 @@
 		
 
 // uservars
+			$("<button></button>")
+				.attr("id","Variables-refresh-button")
+				.appendTo("#Variables-col-1")
+				.text("refresh")
+				.addClass("btn btn-primary btn-xs")
+				.click(function(){refreshVariablesTable()})
+		
 			$("<table></table>")
 				.attr("id", "Variables-setup-table-1")
 				.appendTo("#Variables-setup-tab-content")
@@ -438,11 +446,18 @@
 				.appendTo("#Variables-setup-thead-1")
 				.text("Last update")
 			
+
+
+		refreshVariablesTable = function(){
+			var userVariables = $.getUservariables()
+			
+			$("#Variables-setup-table-1 > tbody").remove()	
+
 			$("<tbody></tbody")
 				.attr("id","Variables-setup-tbody-1")
 				.appendTo("#Variables-setup-table-1")
-			
-			domoticzUserVariables.result.forEach(function(value, index){
+
+			userVariables.result.forEach(function(value, index){
 				
 				$("<tr></tr>")
 					.attr("id","Variables-setup-row"+index)
@@ -463,8 +478,8 @@
 					.appendTo("#Variables-setup-row"+index)
 					.text(value.LastUpdate)
 			})
-				
-
+		
+		}
 
 
 // themewatch
@@ -552,7 +567,7 @@ var row = []
 				$("#Magic-setup-widget-title-text")
 					.text($("#Magic-setup-widget-name").val())
   	
-				widget.name = $("#Magic-setup-widget-name").val()
+				
   
 			});
 
@@ -645,10 +660,7 @@ var row = []
 					value : $("#Magic-data-device-select").val()
 				})
 	
-			widget.rows= row  	
-	
-			var bla = JSON.stringify(widget)
-			console.log(bla);
+			  	
   
 			});				
 
@@ -680,8 +692,42 @@ var row = []
 				.addClass("btn btn-primary btn-xs")
 				.text("Save")
 
+//construct widget & save to Domoticz
+			$("#Magic-save-widget" ).click(function() {
+				
+				//fetch fresh values
+				domoticzUserVariables = $.getUservariables()
+				domoticzUserVariables.result.forEach(function(value, index){
+					
+					if(value.Name == "framb0ise_widgets"){
+						widgets = value.Value
+				
+						//construct
+						widget.name = $("#Magic-setup-widget-name").val()
+						widget.rows= row			
+						
+						//combine
+						var newWidgets = $.extend({}, widget, widgets)
+						
+						newWidgets = JSON.stringify(newWidgets)
+						
+						$.updateUservariable(value.idx, value.Name, value.Type, newWidgets)
+					}
+				})
+			})
 
 // existing widgets
+
+domoticzUserVariables.result.forEach(function(value, index){
+	
+	if (value.Name == "framb0ise_widgets"){
+		var idx = value.idx
+		
+		widgets = $.getUservariable(idx)
+	}
+	
+})
+
 
 			$("<div></div>")
 				.attr("id", "Magic-setup-widget-list-3")
@@ -944,6 +990,7 @@ var row = []
 
 $(document).ready(function() {
 $('.collapse').collapse()
+getDomoticzVariables()
 createDomoticzTabs()
 updateDomoticzSetup()
 
@@ -958,15 +1005,23 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		break;
 		
 		case "#Variables-setup-tab-content":
-		getDomoticzVariables()
+		refreshVariablesTable()
+		break;
+		
+		default:
 		break;
 	}
+
 
 	switch(e.relatedTarget.hash){
 		
 		case "#tab-Dashboard":
 		clearTimeout(timerDashboard)
 		break;
+		
+		default:
+		break;
+
 	}
 })
 	$('#Dashboard a[href="#tab-Dashboard"]').tab('show')
