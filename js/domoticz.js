@@ -812,19 +812,19 @@ domoticzUserVariables.result.forEach(function(value, index){
 	//update lights
 	updateDomoticzDashboardNew = function(){
 		var deviceidx
+		var devicename
 		timerDashboardNew = setTimeout(updateDomoticzDashboardNew, 5000)	
 
 		var domoticzUserVariables = $.getUservariables()
 		domoticzUserVariables.result.forEach(function(value, index){
-					
-			if(value.Name == "sd_STB"){
+			devicename = value.Name
+			//alert(devicename)
+			if(value.Name.match(/sd_/)) {//== "sd_STB"){
 				var value = value.Value
 				var idx = value.idx
-				//alert (idx)
-				//alert (value)
 				deviceidx = value.split(",")
-			}
-		})
+			//}
+		//})
 
 		for(i = 1; i < deviceidx.length; i++) {
 			var device = $.getDevice(deviceidx[i])
@@ -837,11 +837,11 @@ domoticzUserVariables.result.forEach(function(value, index){
 		//var col = 1;
 		//devices.result.forEach(function(value,key){
 
-		if(value.Favorite != 0){
+		//if(value.Favorite != 0){
 		
 		//check if DOM elements for device.type exist
 		
-		switch(value.SwitchType){
+		switch(deviceidx[0]){
 			
 			// break up categories into Type or SwitchType
 			case undefined:
@@ -850,8 +850,8 @@ domoticzUserVariables.result.forEach(function(value, index){
 			break;
 			
 			default:
-			var category = value.SwitchType.replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
-			var text = value.Status
+			var category = deviceidx[0].replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
+			var text = value.Data
 		}
 		
 			// pretty cattegory labels AFTER defining
@@ -962,6 +962,9 @@ domoticzUserVariables.result.forEach(function(value, index){
 				.attr("id", category+"-icon")
 				.appendTo("#" + category + "-text")
 				.addClass(categoryClass)
+				.text(devicename)
+
+
 			
 			// switch col
 				col = col+1;
@@ -992,7 +995,7 @@ domoticzUserVariables.result.forEach(function(value, index){
 					.attr("id", "name-"+value.idx)
 					.appendTo("#line-"+value.idx)
 					.addClass("small pull-left")
-					.text(value.Name)
+					.text(value.Type)
 			
 			// add data or status
 				
@@ -1000,7 +1003,7 @@ domoticzUserVariables.result.forEach(function(value, index){
 					.attr("id", "text-" + value.idx)
 					.appendTo("#line-"+value.idx)
 					.addClass("small pull-right")
-					.text(text)
+					.text(value.Data)
 				
 				$("<span></span>")
 					.attr("id", "icon-" + value.idx)
@@ -1068,10 +1071,12 @@ domoticzUserVariables.result.forEach(function(value, index){
 			
 
 
-		}
+		//} //SD Disabled Fav
 
 		})
 		} //SD For Loop
+		} // SD if
+	}) // SD User Variable
 }
 	//update dashboard
 	updateDomoticzDashboard = function(){
@@ -1373,6 +1378,6 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
 	}
 })
-	$('#Dashboard a[href="#tab-Dashboard"]').tab('show')
+	$('#DashboardNew a[href="#tab-DashboardNew"]').tab('show')
 	$('select').selectpicker();
 });
