@@ -817,7 +817,7 @@ domoticzUserVariables.result.forEach(function(value, index){
 
 		var domoticzUserVariables = $.getUservariables()
 		domoticzUserVariables.result.forEach(function(value, index){
-			devicename = value.Name
+			devicename = value.Name.split('_')[1];
 			//alert(devicename)
 			if(value.Name.match(/sd_/)) {//== "sd_STB"){
 				var value = value.Value
@@ -846,12 +846,12 @@ domoticzUserVariables.result.forEach(function(value, index){
 			// break up categories into Type or SwitchType
 			case undefined:
 			var category = value.Type.replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
-			var text = value.Data
+			//var text = value.Data
 			break;
 			
 			default:
 			var category = deviceidx[0].replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
-			var text = value.Data
+			//var text = value.Data
 		}
 		
 			// pretty cattegory labels AFTER defining
@@ -962,13 +962,19 @@ domoticzUserVariables.result.forEach(function(value, index){
 				.attr("id", category+"-icon")
 				.appendTo("#" + category + "-text")
 				.addClass(categoryClass)
+
+				$("<span></span>")
+				.attr("id", category+"-icon")
+				.appendTo("#" + category + "-text")
+				.addClass("small pull-right")
 				.text(devicename)
 
-
 			
-			// switch col
+				// switch col
 				col = col+1;
-				if(col==5){col=1}
+				if(col==5){
+					col=1
+				}
 			
 				
 			}
@@ -985,7 +991,7 @@ domoticzUserVariables.result.forEach(function(value, index){
 
 					.appendTo("#"+category)
 					
-			$("<div></div>")
+				$("<div></div>")
 					.attr("id", "line-"+value.idx)
 					.appendTo("#"+value.idx)
 					.addClass("clearfix list-group-item-text")
@@ -997,7 +1003,7 @@ domoticzUserVariables.result.forEach(function(value, index){
 					.addClass("small pull-left")
 					.text(value.Type)
 			
-			// add data or status
+				// add data or status
 				
 				$("<span></span>")
 					.attr("id", "text-" + value.idx)
@@ -1017,25 +1023,25 @@ domoticzUserVariables.result.forEach(function(value, index){
 			// create 'popouts'
 			if(!$("#popout-"+value.idx).length){
 			
-			$("<div></div>")
-				.attr("id", "popout-"+value.idx)
-				.appendTo("#"+value.idx)
-				.attr("data-parent", "#"+value.idx)
-				.addClass("spaced collapse well small")
+				$("<div></div>")
+					.attr("id", "popout-"+value.idx)
+					.appendTo("#"+value.idx)
+					.attr("data-parent", "#"+value.idx)
+					.addClass("spaced collapse well small")
 			
-			$("<p></p>")
-				.attr("id", "LastUpdate-"+value.idx)
-				.appendTo("#popout-"+value.idx)
-				.text(value.LastUpdate)
-				.addClass("list-group-item-text small")
+				$("<p></p>")
+					.attr("id", "LastUpdate-"+value.idx)
+					.appendTo("#popout-"+value.idx)
+					.text(value.LastUpdate)
+					.addClass("list-group-item-text small")
 
-			if(value.BatteryLevel < 100){
+				if(value.BatteryLevel < 100){
 
-			$("<p></p>")
-				.attr("id", "BatteryStatus-"+value.idx)
-				.appendTo("#popout-"+value.idx)
-				.text(value.BatteryLevel)
-				.addClass("list-group-item-text small")
+				$("<p></p>")
+					.attr("id", "BatteryStatus-"+value.idx)
+					.appendTo("#popout-"+value.idx)
+					.text(value.BatteryLevel)
+					.addClass("list-group-item-text small")
 				
 			}
 					
@@ -1060,7 +1066,7 @@ domoticzUserVariables.result.forEach(function(value, index){
 				.fadeIn(1500)				
 			}
 			
-			if ($("#BatteryStatus-"+value.idx).text() != value.BatteryStatus){				
+			if ($("#BatteryStatus-"+value.idx).text() != value.BatteryStatus) {				
 				$("#BatteryStatus-"+value.idx)
 				.hide()
 				.text(value.BatteryStatus)
