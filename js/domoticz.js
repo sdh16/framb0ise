@@ -811,10 +811,11 @@ domoticzUserVariables.result.forEach(function(value, index){
 
 	//update lights
 	updateDomoticzDashboardNew = function(){
-		var deviceidx
-		var deviceName
 		timerDashboardNew = setTimeout(updateDomoticzDashboardNew, 5000)	
 
+		var deviceidx
+		var deviceName
+		var col = 1;
 		var domoticzUserVariables = $.getUservariables()
 		domoticzUserVariables.result.forEach(function(value, index){
 			if(value.Name.match(/sd_/)) {//== "sd_STB"){
@@ -827,7 +828,6 @@ domoticzUserVariables.result.forEach(function(value, index){
 
 		for(i = 1; i < deviceidx.length; i++) {
 			var device = $.getDevice(deviceidx[i])
-			var col = 1;
 			device.forEach(function(value, key) {
 				var text = value.Data
 				//alert(value.Name)
