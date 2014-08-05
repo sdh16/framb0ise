@@ -812,34 +812,25 @@ domoticzUserVariables.result.forEach(function(value, index){
 	//update lights
 	updateDomoticzDashboardNew = function(){
 		var deviceidx
-		var devicename
+		var deviceName
 		timerDashboardNew = setTimeout(updateDomoticzDashboardNew, 5000)	
 
 		var domoticzUserVariables = $.getUservariables()
 		domoticzUserVariables.result.forEach(function(value, index){
-			devicename = value.Name.split('_')[1];
-			//alert(devicename)
 			if(value.Name.match(/sd_/)) {//== "sd_STB"){
-				var value = value.Value
+				//var value = value.Value
 				var idx = value.idx
-				deviceidx = value.split(",")
-			//}
-		//})
+				deviceidx = value.Value.split(",")
+				//alert (value)
+				deviceName = value.Name.split('_')[1];
+				//alert(deviceName)
 
 		for(i = 1; i < deviceidx.length; i++) {
 			var device = $.getDevice(deviceidx[i])
 			var col = 1;
-			$.map(device, function(value, key) {
+			device.forEach(function(value, key) {
 				var text = value.Data
-			//})
-		//}
-		//var devices = $.getUseddevices()
-		//var col = 1;
-		//devices.result.forEach(function(value,key){
-
-		//if(value.Favorite != 0){
-		
-		//check if DOM elements for device.type exist
+				//alert(value.Name)
 		
 		switch(deviceidx[0]){
 			
@@ -847,11 +838,13 @@ domoticzUserVariables.result.forEach(function(value, index){
 			case undefined:
 			var category = value.Type.replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
 			//var text = value.Data
+			var deviceCategory = deviceName.replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
 			break;
 			
 			default:
 			var category = deviceidx[0].replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
 			//var text = value.Data
+			var deviceCategory = deviceName.replace(/[_\s]/g, '').replace(/[^a-z0-9-\s]/gi, '');
 		}
 		
 			// pretty cattegory labels AFTER defining
@@ -864,7 +857,6 @@ domoticzUserVariables.result.forEach(function(value, index){
 			case "Rain":
 			var categoryClass = "ion ion-umbrella"
 			break;
-
 
 			case "Blinds":
 			var categoryClass = "fa fa-unsorted"
@@ -946,28 +938,28 @@ domoticzUserVariables.result.forEach(function(value, index){
 		}	
 
 			// create the headings for each devicetype
-			if(!$("#" + category ).length) {
+			if(!$("#" + deviceCategory ).length) {
 				
 				$("<div></div>")
-				.attr("id", category)
+				.attr("id", deviceCategory)
 				.appendTo("#DashboardNew-col-"+col)
 				.addClass("list-group")
 				
 				$("<a></a>")
-				.attr("id", category+"-text")
-				.appendTo("#" + category)
+				.attr("id", deviceCategory+"-text")
+				.appendTo("#" + deviceCategory)
 				.addClass("list-group-item active")
 								
 				$("<span></span>")
-				.attr("id", category+"-icon")
-				.appendTo("#" + category + "-text")
+				.attr("id", deviceCategory+"-icon")
+				.appendTo("#" + deviceCategory + "-text")
 				.addClass(categoryClass)
 
 				$("<span></span>")
-				.attr("id", category+"-icon")
-				.appendTo("#" + category + "-text")
+				.attr("id", deviceCategory+"-icon")
+				.appendTo("#" + deviceCategory + "-text")
 				.addClass("small pull-right")
-				.text(devicename)
+				.text(deviceName)
 
 			
 				// switch col
@@ -989,7 +981,7 @@ domoticzUserVariables.result.forEach(function(value, index){
 					.attr("data-toggle", "collapse")
 					.attr("data-target", "#popout-"+value.idx)
 
-					.appendTo("#"+category)
+					.appendTo("#"+deviceCategory)
 					
 				$("<div></div>")
 					.attr("id", "line-"+value.idx)
