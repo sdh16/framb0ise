@@ -261,7 +261,7 @@
 					break;
 					
 					case "DashboardNew":
-					var tabclass = "fa fa-dashboard"
+					var tabclass = "ion ion-home"
 					break;
 
 					case "Rooms":
@@ -815,23 +815,16 @@ domoticzUserVariables.result.forEach(function(value, index){
 
 		var deviceidx
 		var deviceName
+		var vdidx
 		var col = 1;
 		var domoticzUserVariables = $.getUservariables()
 		domoticzUserVariables.result.forEach(function(value, index){
 			if(value.Name.match(/sd_/)) {//== "sd_STB"){
 				//var value = value.Value
-				var idx = value.idx
+				vdidx = value.idx
 				deviceidx = value.Value.split(",")
-				//alert (value)
 				deviceName = value.Name.split('_')[1];
-				//alert(deviceName)
 
-		for(i = 1; i < deviceidx.length; i++) {
-			var device = $.getDevice(deviceidx[i])
-			device.forEach(function(value, key) {
-				var text = value.Data
-				//alert(value.Name)
-		
 		switch(deviceidx[0]){
 			
 			// break up categories into Type or SwitchType
@@ -931,6 +924,10 @@ domoticzUserVariables.result.forEach(function(value, index){
 			var categoryClass = "fa fa-bullseye"
 			break;
 			
+			case "Weather":
+			var categoryClass = "ion ion-ios7-cloud-outline"
+			break;
+
 			default:
 			var categoryClass = "fa fa-question"
 			break;			
@@ -938,28 +935,28 @@ domoticzUserVariables.result.forEach(function(value, index){
 		}	
 
 			// create the headings for each devicetype
-			if(!$("#" + deviceCategory ).length) {
+			if(!$("#" + category ).length) {
 				
 				$("<div></div>")
-				.attr("id", deviceCategory)
+				.attr("id", category)
 				.appendTo("#DashboardNew-col-"+col)
 				.addClass("list-group")
 				
 				$("<a></a>")
-				.attr("id", deviceCategory+"-text")
-				.appendTo("#" + deviceCategory)
+				.attr("id", category+"-text")
+				.appendTo("#" + category)
 				.addClass("list-group-item active")
 								
 				$("<span></span>")
-				.attr("id", deviceCategory+"-icon")
-				.appendTo("#" + deviceCategory + "-text")
+				.attr("id", category+"-icon")
+				.appendTo("#" + category + "-text")
 				.addClass(categoryClass)
 
-				$("<span></span>")
-				.attr("id", deviceCategory+"-icon")
-				.appendTo("#" + deviceCategory + "-text")
-				.addClass("small pull-right")
-				.text(deviceName)
+				//$("<span></span>")
+				//.attr("id", category+"-name")
+				//.appendTo("#" + category + "-text")
+				//.addClass("small pull-right")
+				//.text(deviceName)
 
 			
 				// switch col
@@ -970,22 +967,134 @@ domoticzUserVariables.result.forEach(function(value, index){
 			
 				
 			}
+
+		for(i = 1; i < deviceidx.length; i++) {
+			var device = $.getDevice(deviceidx[i])
+			device.forEach(function(value, key) {
+				var text = value.Data
+				//alert(value.Name)
+		// Create Device Type icons
+		switch(value.Type){
+
+			case "Dimmer":
+			var deviceType = "fa fa-sliders"
+			break;
 			
-			// create a row for each device
+			case "Rain":
+			var deviceType = "ion ion-umbrella"
+			break;
+
+			case "Blinds":
+			var deviceType = "fa fa-unsorted"
+			break;
+			
+			case "P1Smartmeter":
+			var deviceType = "fa fa-tasks"
+			break;
+			
+			case "Wind":
+			var deviceType = "fa fa-compass"
+			break;
+			
+			case "Thermostat":
+			var deviceType = "fa fa-tachometer"
+			break;
+
+			
+			case "Contact":
+			var deviceType = "ion ion-toggle"
+			break;
+			
+			case "Temp + Humidity":
+			var deviceType = "ion ion-thermometer"
+			break;
+			
+			case "SmokeDetector":
+			var deviceType = "glyphicon glyphicon-fire"
+			break;
+			
+			case "Lighting 2":
+			var deviceType = "ion ion-android-lightbulb"
+			break;
+			
+			case "Security":
+			var deviceType = "fa fa-shield"
+			break;
+			
+			case "DuskSensor":
+			var deviceType = "fa fa-square"
+			break;
+			
+			case "General":
+			if (value.SubType == "Solar Radiation")
+			var deviceType = "ion ion-nuclear"
+			else
+			var deviceType = "ion ion-ios7-pulse-strong"
+			break;
+			
+			case "Usage":
+			var deviceType = "ion ion-flash"
+			break;
+			
+			case "Energy":
+			var deviceType = "ion ion-arrow-graph-up-right"
+			break;
+			
+			case "YouLessMeter":
+			var deviceType = "fa fa-home"
+			break;
+			
+			case "Temp + Humidity + Baro":
+			var deviceType = "fa fa-sun-o"
+			break;
+			
+			case "Temp":
+			var deviceType = "ion ion-thermometer"
+			break;
+			
+			case "MotionSensor":
+			var deviceType = "fa fa-refresh"
+			break;
+			
+			case "Lux":
+			var deviceType = "fa fa-bullseye"
+			break;
+			
+			case "Weather":
+			var deviceType = "ion ion-ios7-cloud-outline"
+			break;
+
+			default:
+			var deviceType = "fa fa-question"
+			break;			
+			
+		}	
+
+			
+			// create a row for each virtual device
 			if(!$("#" + value.idx).length){
 				
-				$("<a></a>")
+				$("<div></div>")
 					.attr("id", value.idx)
 					.attr("href", "#")
 					.addClass("list-group-item")
 					.attr("data-toggle", "collapse")
 					.attr("data-target", "#popout-"+value.idx)
 
-					.appendTo("#"+deviceCategory)
+					.appendTo("#"+category)
+
+				$("<div></div>")
+					.attr("id", "heading-"+value.idx)
+					.appendTo("#"+value.idx)
+					.addClass("clearfix list-group-item-heading")
+					.text(deviceName)
+			//}
 					
+			//if(!$("#" + value.idx).length){
+
 				$("<div></div>")
 					.attr("id", "line-"+value.idx)
-					.appendTo("#"+value.idx)
+					.appendTo("#heading-"+value.idx)
 					.addClass("clearfix list-group-item-text")
 			
 			
@@ -993,14 +1102,17 @@ domoticzUserVariables.result.forEach(function(value, index){
 					.attr("id", "name-"+value.idx)
 					.appendTo("#line-"+value.idx)
 					.addClass("small pull-left")
-					.text(value.Type)
+					// Use icon instead of the textual value
+					//.text(value.Type)
+					.addClass(deviceType)
 			
 				// add data or status
 				
-				$("<span></span>")
+				$("<a></a>")
 					.attr("id", "text-" + value.idx)
 					.appendTo("#line-"+value.idx)
 					.addClass("small pull-right")
+					//.addClass("badge")
 					.text(value.Data)
 				
 				$("<span></span>")
