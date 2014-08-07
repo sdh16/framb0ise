@@ -1014,7 +1014,18 @@ domoticzUserVariables.result.forEach(function(value, index){
 			break;
 			
 			case "Lighting 2":
-			var deviceType = "ion ion-android-lightbulb"
+			if (value.SwitchType == "On/Off")
+			var deviceType = "ion ion-lightbulb"
+			else if (value.SwitchType == "Contact")
+			var deviceType = "ion ion-log-in"
+			else if (value.SwitchType == "Motion Sensor")
+			var deviceType = "fa  fa-male"
+			else if (value.SwitchType == "Smoke Detector")
+			var deviceType = "fa  fa-flame"
+			else if (value.SwitchType == "Dimmer")
+			var deviceType = "ion ion-ios7-settings-strong"
+			else
+			var deviceType = "fa fa-question"
 			break;
 			
 			case "Security":
@@ -1170,7 +1181,7 @@ domoticzUserVariables.result.forEach(function(value, index){
 				.fadeIn(1500)				
 			}
 			
-			if ($("#BatteryStatus-"+value.idx).text() != value.BatteryStatus) {				
+			if ($("#BatteryStatus-"+value.idx).text() != value.BatteryStatus) {
 				$("#BatteryStatus-"+value.idx)
 				.hide()
 				.text(value.BatteryStatus)
