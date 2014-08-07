@@ -1093,7 +1093,7 @@ domoticzUserVariables.result.forEach(function(value, index){
 				$("<div></div>")
 					.attr("id", "line-"+value.idx)
 					.appendTo("#heading-"+vdidx)
-					.addClass("clearfix list-group-item-text small")
+					.addClass("clearfix list-group-item-text")
 					.attr("data-toggle", "collapse")
 					.attr("data-target", "#popout-"+value.idx)
 			
