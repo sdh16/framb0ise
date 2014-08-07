@@ -1072,30 +1072,30 @@ domoticzUserVariables.result.forEach(function(value, index){
 
 			
 			// create a row for each virtual device
-			if(!$("#" + value.idx).length){
+			if(!$("#" + vdidx).length){
 				
 				$("<div></div>")
-					.attr("id", value.idx)
+					.attr("id", vdidx)
 					.attr("href", "#")
 					.addClass("list-group-item")
-					.attr("data-toggle", "collapse")
-					.attr("data-target", "#popout-"+value.idx)
 
 					.appendTo("#"+category)
 
 				$("<div></div>")
-					.attr("id", "heading-"+value.idx)
-					.appendTo("#"+value.idx)
+					.attr("id", "heading-"+vdidx)
+					.appendTo("#"+vdidx)
 					.addClass("clearfix list-group-item-heading")
 					.text(deviceName)
-			//}
+			}
 					
-			//if(!$("#" + value.idx).length){
+			if(!$("#line-" + value.idx).length){
 
 				$("<div></div>")
 					.attr("id", "line-"+value.idx)
-					.appendTo("#heading-"+value.idx)
-					.addClass("clearfix list-group-item-text")
+					.appendTo("#heading-"+vdidx)
+					.addClass("clearfix list-group-item-text small")
+					.attr("data-toggle", "collapse")
+					.attr("data-target", "#popout-"+value.idx)
 			
 			
 				$("<span></span>")
@@ -1129,8 +1129,8 @@ domoticzUserVariables.result.forEach(function(value, index){
 			
 				$("<div></div>")
 					.attr("id", "popout-"+value.idx)
-					.appendTo("#"+value.idx)
-					.attr("data-parent", "#"+value.idx)
+					.appendTo("#line-"+value.idx)
+					.attr("data-parent", "#line-"+value.idx)
 					.addClass("spaced collapse well small")
 			
 				$("<p></p>")
