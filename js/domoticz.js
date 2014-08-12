@@ -819,7 +819,7 @@ domoticzUserVariables.result.forEach(function(value, index){
 		var col = 1;
 		var domoticzUserVariables = $.getUservariables()
 		domoticzUserVariables.result.forEach(function(value, index){
-			if(value.Name.match(/sd_/)) {//== "sd_STB"){
+			if(value.Name.match(/vd_/)) {
 				//var value = value.Value
 				vdidx = value.idx
 				deviceidx = value.Value.split(",")
